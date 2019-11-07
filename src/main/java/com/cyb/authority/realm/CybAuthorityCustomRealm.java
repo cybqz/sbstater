@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
+/**
+ * @author chenyingbo
+ */
 public class CybAuthorityCustomRealm extends AuthorizingRealm {
 
 	private static final Logger logger = LoggerFactory.getLogger(CybAuthorityCustomRealm.class);
@@ -41,11 +44,9 @@ public class CybAuthorityCustomRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         logger.info("======用户登陆认证======");
         String name = authenticationToken.getPrincipal().toString();
-        String password = new String((char[])authenticationToken.getCredentials());
 		List<CybAuthorityUser> users = cybAuthorityUserService.selectByName(name);
 		if(users != null && users.size() > 0) {
             CybAuthorityUser user = users.get(0);
-            System.out.println("doGetAuthenticationInfo\t"+name+"\t"+password+"\t"+user.getPassword());
 			AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), "CustomRealm");
 	        return authenticationInfo;
 		}
