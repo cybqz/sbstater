@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.cyb.authority.config.CybAuthorityLoginServiceAutoConfig,\
+com.cyb.authority.config.CybAuthorityUserServiceAutoConfig,\
+com.cyb.authority.config.ShiroConfig

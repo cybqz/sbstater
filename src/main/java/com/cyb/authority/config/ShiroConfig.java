@@ -1,0 +1,64 @@
+package com.cyb.authority.config;
+
+import com.cyb.authority.realm.CybAuthorityCustomRealm;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+@Configuration
+public class ShiroConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
+
+    @Bean(name = "shiroFilter")
+    public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        //shiroFilterFactoryBean.setLoginUrl("/login");
+        //shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
+        //filterChainDefinitionMap.put("/webjars/**", "anon");
+
+        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
+        //filterChainDefinitionMap.put("/**", "authc");
+        //shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+
+        logger.info("shiroFilter config success!");
+        return shiroFilterFactoryBean;
+    }
+
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        //加密方式
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+        //加密次数
+        //hashedCredentialsMatcher.setHashIterations(1);
+        //存储散列后的密码是否为16进制
+        //hashedCredentialsMatcher.isStoredCredentialsHexEncoded();
+        return hashedCredentialsMatcher;
+    }
+
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager defaultSecurityManager = new DefaultWebSecurityManager();
+        defaultSecurityManager.setRealm(customRealm());
+        return defaultSecurityManager;
+    }
+
+    @Bean
+    public CybAuthorityCustomRealm customRealm() {
+        CybAuthorityCustomRealm customRealm = new CybAuthorityCustomRealm();
+        return customRealm;
+    }
+}
