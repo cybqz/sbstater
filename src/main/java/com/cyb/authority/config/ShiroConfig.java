@@ -1,5 +1,6 @@
 package com.cyb.authority.config;
 
+import com.cyb.authority.properties.ShiroConfigurationProperties;
 import com.cyb.authority.realm.CybAuthorityCustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
@@ -7,32 +8,41 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Configuration
+@ComponentScan({"com.cyb.authority.properties"})
 public class ShiroConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ShiroConfig.class);
 
-    @Bean(name = "shiroFilter")
+    @Autowired
+    private ShiroConfigurationProperties shiroConfigurationProperties;
+
+    @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        //shiroFilterFactoryBean.setLoginUrl("/login");
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        if(null != shiroConfigurationProperties.getLoginUrl()){
+            shiroFilterFactoryBean.setLoginUrl(shiroConfigurationProperties.getLoginUrl());
+        }
+
+        if(null != shiroConfigurationProperties.getUnauthorizedUrl()){
+            shiroFilterFactoryBean.setUnauthorizedUrl(shiroConfigurationProperties.getUnauthorizedUrl());
+        }
+
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         //filterChainDefinitionMap.put("/webjars/**", "anon");
 
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
         //filterChainDefinitionMap.put("/**", "authc");
-        //shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-
-        logger.info("shiroFilter config success!");
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
