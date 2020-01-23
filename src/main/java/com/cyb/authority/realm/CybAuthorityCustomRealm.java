@@ -42,10 +42,9 @@ public class CybAuthorityCustomRealm extends AuthorizingRealm {
         logger.info("======用户登陆认证======");
         String name = authenticationToken.getPrincipal().toString();
         String password = new String((char[])authenticationToken.getCredentials());
-		List<CybAuthorityUser> users = cybAuthorityUserService.selectByName(name);
-		if(users != null && users.size() > 0) {
-            CybAuthorityUser user = users.get(0);
-            System.out.println("doGetAuthenticationInfo\t"+name+"\t"+password+"\t"+user.getPassword());
+        CybAuthorityUser user = cybAuthorityUserService.selectByName(name);
+		if(user != null) {
+            logger.info("doGetAuthenticationInfo\t"+name+"\t"+password+"\t"+user.getPassword());
 			AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), "CustomRealm");
 	        return authenticationInfo;
 		}
