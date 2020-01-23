@@ -13,5 +13,5 @@ public interface CybAuthorityUserService {
 
     public Set<String> queryPermissionByName(String userName);
 
-    public List<CybAuthorityUser> selectByName(String name);
+    public CybAuthorityUser selectByName(String userName);
 }

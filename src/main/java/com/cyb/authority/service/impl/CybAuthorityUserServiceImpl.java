@@ -3,10 +3,6 @@ package com.cyb.authority.service.impl;
 import com.cyb.authority.domain.CybAuthorityUser;
 import com.cyb.authority.exception.UndefinedException;
 import com.cyb.authority.service.CybAuthorityUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +31,7 @@ public class CybAuthorityUserServiceImpl implements CybAuthorityUserService {
     }
 
     @Override
-    public List<CybAuthorityUser> selectByName(String name){
+    public CybAuthorityUser selectByName(String userName){
         try {
             throw new UndefinedException();
         } catch (UndefinedException e) {
