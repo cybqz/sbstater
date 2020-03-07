@@ -21,6 +21,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<shiro.version>1.2.4</shiro.version>
+		<spring.version>2.1.8.RELEASE</spring.version>
 	</properties>
 
 	<dependencies>
@@ -28,12 +29,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-autoconfigure</artifactId>
-			<version>2.1.8.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
-			<version>2.1.8.RELEASE</version>
+			<version>${spring.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<!--shiro-->
@@ -83,18 +84,6 @@
 				</excludes>
 			</resource>
 		</resources>
-		<testResources>
-			<testResource>
-				<filtering>false</filtering>
-				<directory>src/test/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
