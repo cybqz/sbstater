@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cyb.forum.dao.ForumDiscussMapper" >
+  <resultMap id="BaseResultMap" type="com.cyb.forum.domain.ForumDiscuss" >
+    <result property="id" column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="userId" column="user_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="message_id" column="message_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="content" column="content" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="img" column="img" jdbcType="VARCHAR" javaType="java.lang.String" />
+    <result property="createDateTime" column="create_date_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+  </resultMap>
+  <insert id="insert" parameterType="com.cyb.forum.domain.ForumDiscuss" >
+    insert into forum_discuss (id, user_id, message_id, content,
+      img, create_date_time)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{messageId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+      #{img,jdbcType=VARCHAR}, #{createDateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cyb.forum.domain.ForumDiscuss" >
+    insert into forum_discuss
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="img != null" >
+        img,
+      </if>
+      <if test="createDateTime != null" >
+        create_date_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="createDateTime != null" >
+        #{createDateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from forum_discuss where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select * from forum_discuss where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectSelective" resultMap="BaseResultMap">
+    select * from forum_discuss
+    where 1 = 1
+    <if test="userId != null and userId != ''">
+      and user_id = #{userId,jdbcType=VARCHAR}
+    </if>
+    order by create_date_time
+  </select>
+</mapper>
