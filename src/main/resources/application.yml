@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: cybchat
+server:
+  port: 8888
