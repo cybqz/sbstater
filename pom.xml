@@ -3,40 +3,27 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>cyb-forum-spring-boot-stater</groupId>
-	<artifactId>cyb-forum</artifactId>
+	<parent>
+		<groupId>cyb-spring-boot-stater-parent</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>cyb-spring-boot-stater-forum</groupId>
+	<artifactId>forum</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>forum</name>
 	<description>Demo project for Spring Boot</description>
 
-	<properties>
-		<java.version>1.8</java.version>
-		<spring.version>2.1.8.RELEASE</spring.version>
-	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<version>${spring.version}</version>
-			<optional>true</optional>
-		</dependency>
 
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
+			<groupId>cyb-spring-boot-stater-common</groupId>
+			<artifactId>common</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>2.1.0</version>
-		</dependency>
+
 	</dependencies>
 
 	<build>
