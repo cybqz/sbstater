@@ -14,7 +14,10 @@
         <shiro.version>1.2.4</shiro.version>
         <lombok.version>1.18.12</lombok.version>
         <mybatis.version>2.1.0</mybatis.version>
+        <fastjson.version>1.2.62</fastjson.version>
         <spring.version>2.1.8.RELEASE</spring.version>
+        <commons.lang3.version>3.9</commons.lang3.version>
+        <fasterxml.jackson.version>2.8.8</fasterxml.jackson.version>
     </properties>
 
 </project>
