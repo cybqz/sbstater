@@ -1,8 +1,10 @@
 package com.cyb.authority.config;
 
+import com.cyb.authority.filter.CORSAuthenticationFilter;
 import com.cyb.authority.properties.ShiroConfigurationProperties;
 import com.cyb.authority.realm.CybAuthorityCustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,14 +33,14 @@ public class ShiroConfig {
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        ShiroFilterFactoryBean shiroFilterFactory = new ShiroFilterFactoryBean();
+        shiroFilterFactory.setSecurityManager(securityManager);
         if(null != shiroConfigurationProperties.getLoginUrl()){
-            shiroFilterFactoryBean.setLoginUrl(shiroConfigurationProperties.getLoginUrl());
+            shiroFilterFactory.setLoginUrl(shiroConfigurationProperties.getLoginUrl());
         }
 
         if(null != shiroConfigurationProperties.getUnauthorizedUrl()){
-            shiroFilterFactoryBean.setUnauthorizedUrl(shiroConfigurationProperties.getUnauthorizedUrl());
+            shiroFilterFactory.setUnauthorizedUrl(shiroConfigurationProperties.getUnauthorizedUrl());
         }
 
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
@@ -45,8 +49,13 @@ public class ShiroConfig {
 
         //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截 剩余的都需要认证
         //filterChainDefinitionMap.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
-        return shiroFilterFactoryBean;
+        shiroFilterFactory.setFilterChainDefinitionMap(filterChainDefinitionMap);
+
+        //自定义拦截器
+        Map<String, Filter> customFilterMap = new LinkedHashMap<>();
+        customFilterMap.put("corsAuthenticationFilter", new CORSAuthenticationFilter());
+        shiroFilterFactory.setFilters(customFilterMap);
+        return shiroFilterFactory;
     }
 
     @Bean
@@ -82,6 +91,18 @@ public class ShiroConfig {
     public CybAuthorityCustomRealm customRealm() {
         CybAuthorityCustomRealm customRealm = new CybAuthorityCustomRealm();
         return customRealm;
+    }
+
+    /**
+     * shiro缓存管理器
+     * 在securityManager 中注册缓存管理器，之后就不会每次都会去查询数据库了，
+     * 相关的权限和角色会保存在缓存中，但需要注意一点，更新了权限等操作之后，需要及时的清理缓存
+     */
+    @Bean
+    public EhCacheManager ehCacheManager() {
+        EhCacheManager cacheManager = new EhCacheManager();
+        cacheManager.setCacheManagerConfigFile("classpath:config/ehcache.xml");
+        return cacheManager;
     }
 
     @Bean
