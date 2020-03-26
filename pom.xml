@@ -16,8 +16,6 @@
 	<name>authority</name>
 	<description>authority</description>
 
-
-
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -33,6 +31,7 @@
 			<artifactId>common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+
 		<!--shiro-->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>

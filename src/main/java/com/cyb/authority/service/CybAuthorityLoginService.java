@@ -21,11 +21,11 @@ public class CybAuthorityLoginService {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, EncryptionDecrypt.encryptionMD5(password));
             try {
-                logger.info("开始登陆.......");
                 subject.login(usernamePasswordToken);
                 Object object = subject.getPrincipal();
                 subject.getSession(true).setAttribute("SESSION_NAME", object);
             } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
             return true;

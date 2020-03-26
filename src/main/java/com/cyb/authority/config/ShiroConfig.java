@@ -4,6 +4,9 @@ import com.cyb.authority.properties.ShiroConfigurationProperties;
 import com.cyb.authority.realm.CybAuthorityCustomRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.slf4j.Logger;
@@ -59,10 +62,19 @@ public class ShiroConfig {
         return hashedCredentialsMatcher;
     }
 
+    //加入注解的使用，不加入这个注解不生效
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager defaultSecurityManager = new DefaultWebSecurityManager();
         defaultSecurityManager.setRealm(customRealm());
+        defaultSecurityManager.setSessionManager(sessionManager());
         return defaultSecurityManager;
     }
 
@@ -70,5 +82,13 @@ public class ShiroConfig {
     public CybAuthorityCustomRealm customRealm() {
         CybAuthorityCustomRealm customRealm = new CybAuthorityCustomRealm();
         return customRealm;
+    }
+
+    @Bean
+    public SessionManager sessionManager(){
+        CybShiroSessionManager shiroSessionManager = new CybShiroSessionManager();
+        //这里可以不设置。Shiro有默认的session管理。如果缓存为Redis则需改用Redis的管理
+        //shiroSessionManager.setSessionDAO(new EnterpriseCacheSessionDAO());
+        return shiroSessionManager;
     }
 }
