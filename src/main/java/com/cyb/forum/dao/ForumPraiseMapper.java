@@ -15,6 +15,8 @@ public interface ForumPraiseMapper {
 
     int deleteByPrimaryKey(String id);
 
+    int deleteByForumMessageId(String messageId);
+
     ForumPraise selectOne(@Param("userId") String userId, @Param("messageId") String messageId);
 
     ForumPraise selectByPrimaryKey(String id);

@@ -52,9 +52,14 @@
       </if>
     </trim>
   </insert>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from forum_discuss where id = #{id,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteByForumMessageId" parameterType="java.lang.String">
+    delete from forum_discuss where message_id = #{messageId,jdbcType=VARCHAR}
+  </delete>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
     select * from forum_discuss where id = #{id,jdbcType=VARCHAR}
   </select>

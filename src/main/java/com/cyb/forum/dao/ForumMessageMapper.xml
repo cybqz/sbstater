@@ -144,7 +144,7 @@
     <if test="forumMessage.content != null and forumMessage.content != ''">
       and content like concat('%',#{forumMessage.content,jdbcType=VARCHAR},'%')
     </if>
-    order by create_date_time
+    order by create_date_time desc
     limit #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
   </select>
 </mapper>

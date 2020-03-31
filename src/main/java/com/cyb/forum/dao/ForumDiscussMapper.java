@@ -17,6 +17,8 @@ public interface ForumDiscussMapper {
 
     int deleteByPrimaryKey(String id);
 
+    int deleteByForumMessageId(String messageId);
+
     ForumDiscuss selectByPrimaryKey(String id);
 
     List<ForumDiscuss> selectSelective(ForumDiscuss forumDiscuss);
