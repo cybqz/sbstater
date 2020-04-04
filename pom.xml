@@ -13,8 +13,7 @@
 	<artifactId>forum</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>forum</name>
-	<description>Demo project for Spring Boot</description>
-
+	<description>Forum project for Spring Boot</description>
 
 	<dependencies>
 
@@ -35,19 +34,12 @@
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
 		</resources>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
 			<plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
