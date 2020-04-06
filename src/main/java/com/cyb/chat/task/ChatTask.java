@@ -1,17 +1,21 @@
 package com.cyb.chat.task;
 
-import com.cyb.chat.server.CybWebSocketServer;
+import com.cyb.chat.server.CybTeamChatWSServer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ChatTask {
 
+    @Autowired
+    private CybTeamChatWSServer cybTeamChatWSServer;
+
     @Scheduled(cron="0/5 * * * * ? ") //每5秒执行一次
     public void testA(){
 
         try {
-            CybWebSocketServer.sendInfo("messageA", "5");
+            cybTeamChatWSServer.sendInfo("messageA", "5");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -21,7 +25,7 @@ public class ChatTask {
     public void testB(){
 
         try {
-            CybWebSocketServer.sendInfo("messageB", "7");
+            cybTeamChatWSServer.sendInfo("messageB", "7");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -31,7 +35,7 @@ public class ChatTask {
     public void testC(){
 
         try {
-            CybWebSocketServer.sendInfo("messageC", "9");
+            cybTeamChatWSServer.sendInfo("messageC", "9");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -41,7 +45,7 @@ public class ChatTask {
     public void testD(){
 
         try {
-            CybWebSocketServer.sendInfo("messageD", "11");
+            cybTeamChatWSServer.sendInfo("messageD", "11");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -51,7 +55,7 @@ public class ChatTask {
     public void testE(){
 
         try {
-            CybWebSocketServer.sendInfo("messageE", "13");
+            cybTeamChatWSServer.sendInfo("messageE", "13");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -61,7 +65,7 @@ public class ChatTask {
     public void testF(){
 
         try {
-            CybWebSocketServer.sendInfo("messageF", "15");
+            cybTeamChatWSServer.sendInfo("messageF", "15");
         }catch (Exception e){
             e.printStackTrace();
         }

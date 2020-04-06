@@ -25,5 +25,3 @@ hs_err_pid*
 target/
 
 .idea/
-.idea/*
-src/main/java/com/cyb/chat/ChatApplication.java
