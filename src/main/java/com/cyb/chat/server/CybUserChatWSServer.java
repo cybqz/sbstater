@@ -147,20 +147,6 @@ public class CybUserChatWSServer {
         }
     }
 
-    public R registerTeam(List<String> teamList){
-
-        if(null != teamList && !teamList.isEmpty()){
-
-            for(String team : teamList){
-
-            }
-
-            return R.success("success");
-        }
-
-        return R.fail("fail");
-    }
-
     public synchronized int getOnlineCount() {
         return onlineCount;
     }

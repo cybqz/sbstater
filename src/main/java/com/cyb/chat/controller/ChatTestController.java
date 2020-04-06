@@ -35,7 +35,7 @@ public class ChatTestController {
             @RequestParam(value = "userIdList")List<String> userIdList,
             @RequestParam(value = "userNameList")List<String> userNameList){
         try {
-            cybTeamChatWSServer.register(team, userIdList, userNameList);
+            cybTeamChatWSServer.initRegister(team, userIdList, userNameList);
             return ResponseEntity.ok("Register Team SUCCESS");
         }catch (Exception e){
             e.printStackTrace();

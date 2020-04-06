@@ -13,7 +13,6 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint("/teamChatServer/{userId}")
@@ -60,7 +59,7 @@ public class CybTeamChatWSServer {
 
                 }
 
-                log.info("用户连接:"+userId+",当前在线人数为:" + getOnlineCount());
+                log.info("用户连接:"+key+",当前在线人数为:" + getOnlineCount());
                 sendMessage("连接成功");
             }
         } catch (IOException e) {
@@ -119,7 +118,7 @@ public class CybTeamChatWSServer {
                                     }
                                     USER_WEB_SOCKET_MAP.get(tempKey).sendMessage(messageObject.toJSONString());
                                 }else{
-                                    log.error("请求的userId:"+from_id+"不在该服务器上");
+                                    log.error("请求的:"+tempKey+"不在该服务器上");
                                 }
                             }
                         }else{
@@ -165,7 +164,7 @@ public class CybTeamChatWSServer {
         }
     }
 
-    public R register(String team, List<String> userIdList, List<String> userNameList){
+    public R initRegister(String team, List<String> userIdList, List<String> userNameList){
 
         try {
             int index = 0;
@@ -179,6 +178,25 @@ public class CybTeamChatWSServer {
                 TEAM_INFO_MAP.remove(team);
             }
             TEAM_INFO_MAP.put(team, userIdList);
+            return R.success("success");
+        }catch (Exception e){
+            return R.fail("exception:\t" + e.getMessage());
+        }
+    }
+
+    public R addRegister(String team, String userId, String userName){
+
+        try {
+            USER_TEAM_INFO_MAP.put(userId, team);
+            USER_INFO_MAP.put(userId, userName);
+
+            if(TEAM_INFO_MAP.containsKey(team)){
+                List<String> teamList = TEAM_INFO_MAP.get(team);
+                teamList.add(userId);
+                TEAM_INFO_MAP.put(team, teamList);
+            }
+
+            log.info("添加用户成功");
             return R.success("success");
         }catch (Exception e){
             return R.fail("exception:\t" + e.getMessage());
