@@ -145,6 +145,7 @@ public class CybTeamChatWSServer {
      */
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
+        log.info(message);
     }
 
 
