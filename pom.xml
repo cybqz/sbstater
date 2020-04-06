@@ -9,7 +9,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cyb-chat-spring-boot-stater</groupId>
+    <groupId>cyb-spring-boot-stater-chat</groupId>
     <artifactId>cyb-chat</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -41,30 +41,18 @@
 
     <build>
         <resources>
-            <resource>
+            <!--<resource>
                 <filtering>false</filtering>
                 <directory>src/main/resources</directory>
-            </resource>
+            </resource>-->
             <resource>
                 <filtering>false</filtering>
                 <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
                 <excludes>
-                    <exclude>**/*.java</exclude>
+                    <exclude>**/**/*.java</exclude>
                 </excludes>
             </resource>
         </resources>
-        <testResources>
-            <testResource>
-                <filtering>false</filtering>
-                <directory>src/test/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
