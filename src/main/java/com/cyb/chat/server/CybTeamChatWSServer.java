@@ -55,10 +55,6 @@ public class CybTeamChatWSServer {
                     //在线数加1
                 }
 
-                if(!USER_INFO_MAP.containsKey(userId)){
-
-                }
-
                 log.info("用户连接:"+key+",当前在线人数为:" + getOnlineCount());
                 sendMessage("连接成功");
             }
