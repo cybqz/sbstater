@@ -87,14 +87,14 @@ public class CybTeamChatWSServer {
             try {
                 //解析发送的报文
                 JSONObject messageObject = JSON.parseObject(message);
-                if(!messageObject.containsKey("from-team-id") || !messageObject.containsKey("from-id")){
+                if(!messageObject.containsKey("fromTeamId") || !messageObject.containsKey("fromUserId")){
                     log.info("匿标志消息: " + message);
                 }else{
 
-                    String from_id = messageObject.getString("from-id");
+                    String from_id = messageObject.getString("fromUserId");
                     if(StringUtils.isNotEmpty(from_id)){
 
-                        String from_team_id = messageObject.getString("from-team-id");
+                        String from_team_id = messageObject.getString("fromTeamId");
                         if(StringUtils.isNotEmpty(from_team_id) && TEAM_INFO_MAP.containsKey(from_team_id)){
 
                             //发送消息到群内每个用户
@@ -106,11 +106,11 @@ public class CybTeamChatWSServer {
                                 String tempKey = from_team_id + "_" + userId;
                                 if(USER_WEB_SOCKET_MAP.containsKey(tempKey)){
                                     //追加发送人(防止串改)
-                                    messageObject.put("from-id",this.userId);
+                                    messageObject.put("fromUserId",this.userId);
                                     if(USER_INFO_MAP.containsKey(from_id)){
-                                        messageObject.put("from-name",USER_INFO_MAP.get(from_id));
+                                        messageObject.put("fromName",USER_INFO_MAP.get(from_id));
                                     }else{
-                                        messageObject.put("from-name","none");
+                                        messageObject.put("fromName","none");
                                     }
                                     USER_WEB_SOCKET_MAP.get(tempKey).sendMessage(messageObject.toJSONString());
                                 }else{
