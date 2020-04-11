@@ -1,8 +1,16 @@
 package com.cyb.authority.service.impl;
 
+import com.cyb.authority.dao.UserMapper;
 import com.cyb.authority.domain.CybAuthorityUser;
+import com.cyb.authority.domain.User;
 import com.cyb.authority.exception.UndefinedException;
 import com.cyb.authority.service.CybAuthorityUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,32 +18,31 @@ import java.util.Set;
  */
 public class CybAuthorityUserServiceImpl implements CybAuthorityUserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CybAuthorityUserService.class);
+
+    @Resource
+    private UserMapper userMapper;
+
     @Override
     public Set<String> queryRolesByName(String userName){
-        try {
-            throw new UndefinedException();
-        } catch (UndefinedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return userMapper.queryRolesByName(userName);
     }
 
     @Override
     public Set<String> queryPermissionByName(String userName){
-        try {
-            throw new UndefinedException();
-        } catch (UndefinedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return userMapper.queryPermissionByName(userName);
     }
 
     @Override
     public CybAuthorityUser selectByName(String userName){
-        try {
-            throw new UndefinedException();
-        } catch (UndefinedException e) {
-            e.printStackTrace();
+        logger.info("start selectByName:\t" + userName);
+        List<CybAuthorityUser> resultList = new ArrayList<CybAuthorityUser>();
+        User user = userMapper.selectByUserName(userName);
+        if(null != user){
+            CybAuthorityUser cybAuthorityUser = new CybAuthorityUser();
+            cybAuthorityUser.setName(user.getUserName());
+            cybAuthorityUser.setPassword(user.getPassword());
+            return cybAuthorityUser;
         }
         return null;
     }

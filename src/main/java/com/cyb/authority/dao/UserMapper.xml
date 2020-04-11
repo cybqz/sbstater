@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cyb.authority.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="com.cyb.authority.domain.User">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+  </resultMap>
+
+  <select id="insert" parameterType="com.cyb.authority.domain.User">
+    insert into user (id, name, user_name, password, phone, email, sex, address, image, introduce)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
+           #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+           #{image,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR}
+           )
+  </select>
+
+  <update id="updateByPrimaryKey" parameterType="com.cyb.authority.domain.User">
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR}, introduce = #{introduce,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from user
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from user
+    where user_name = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="queryRolesByName" parameterType="java.lang.String" resultType="java.lang.String">
+    select name from role where id in
+    (
+        select role_id from user_role where user_id in
+            (select id from user where user_name = #{userName,jdbcType=VARCHAR})
+    )
+  </select>
+
+  <select id="queryPermissionByName" parameterType="java.lang.String" resultType="java.lang.String">
+    select name from permission where id in
+    (
+	    select permission_id from role_permission where role_id in
+	    (
+		    select role_id from user_role where user_id in
+		        (select id from user where user_name = #{userName,jdbcType=VARCHAR})
+	    )
+    )
+  </select>
+
+</mapper>
