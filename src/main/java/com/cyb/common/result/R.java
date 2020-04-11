@@ -1,4 +1,4 @@
-package com.cyb.common.r;
+package com.cyb.common.result;
 
 import lombok.Data;
 
