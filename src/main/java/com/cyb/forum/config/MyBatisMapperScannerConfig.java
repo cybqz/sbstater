@@ -14,7 +14,7 @@ public class MyBatisMapperScannerConfig {
      * 使用通用Mapper插件时请勿使用热加载,否则报错,插件作者后续应该会修复
      */
     @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
+    public MapperScannerConfigurer forumMapperScannerConfigurer() {
 
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         //mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
