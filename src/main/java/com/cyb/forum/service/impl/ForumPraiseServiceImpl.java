@@ -1,6 +1,6 @@
 package com.cyb.forum.service.impl;
 
-import com.cyb.common.R.R;
+import com.cyb.common.result.R;
 import com.cyb.forum.dao.ForumMessageMapper;
 import com.cyb.forum.dao.ForumPraiseMapper;
 import com.cyb.forum.domain.ForumMessage;

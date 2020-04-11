@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.cyb.forum.config.CybForumMessageServiceAutoConfig,\
-  com.cyb.forum.config.CybForumDiscussServiceAutoConfig,\
-  com.cyb.forum.config.CybForumPraiseServiceAutoConfig,\
+com.cyb.forum.config.CybForumDiscussServiceAutoConfig,\
+com.cyb.forum.config.CybForumPraiseServiceAutoConfig,\
 com.cyb.forum.config.MyBatisMapperScannerConfig

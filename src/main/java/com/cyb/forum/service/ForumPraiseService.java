@@ -1,6 +1,6 @@
 package com.cyb.forum.service;
 
-import com.cyb.common.R.R;
+import com.cyb.common.result.R;
 import com.cyb.forum.domain.ForumPraise;
 
 import java.util.List;
