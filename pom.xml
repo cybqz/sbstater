@@ -50,18 +50,6 @@
                 <directory>src/main/java</directory>
             </resource>
         </resources>
-        <!--<plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    &lt;!&ndash;<includes>
-                        <include>**/config/*</include>
-                        <include>**/server/*</include>
-                    </includes>&ndash;&gt;
-                </configuration>
-            </plugin>
-        </plugins>-->
     </build>
 
 </project>

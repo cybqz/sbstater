@@ -1,7 +1,6 @@
 package com.cyb.chat.service;
 
-import com.cyb.common.r.R;
-
+import com.cyb.common.result.R;
 import java.util.List;
 
 public interface CybTeamChatWSService {
