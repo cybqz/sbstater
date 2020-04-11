@@ -1,6 +1,6 @@
 package com.cyb.chat.service;
 
-import com.cyb.common.R.R;
+import com.cyb.common.r.R;
 
 import java.util.List;
 
