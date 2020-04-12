@@ -3,6 +3,8 @@ package com.cyb.authority.dao;
 import com.cyb.authority.domain.RolePermission;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface RolePermissionMapper {
 
@@ -17,4 +19,6 @@ public interface RolePermissionMapper {
     int updateByPrimaryKeySelective(RolePermission record);
 
     int updateByPrimaryKey(RolePermission record);
+
+    List<RolePermission> selectByRoleId(String roleId);
 }

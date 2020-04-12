@@ -15,42 +15,36 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
 	@Override
     public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rolePermissionMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int insert(RolePermission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rolePermissionMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(RolePermission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rolePermissionMapper.insertSelective(record);
 	}
 
 	@Override
 	public RolePermission selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return rolePermissionMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(RolePermission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rolePermissionMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
 	public int updateByPrimaryKey(RolePermission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return rolePermissionMapper.updateByPrimaryKey(record);
 	}
 
 	@Override
 	public List<RolePermission> selectByRoleId(String roleId) {
-		return null;
+		return rolePermissionMapper.selectByRoleId(roleId);
 	}
 }

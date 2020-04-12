@@ -4,7 +4,6 @@ import com.cyb.authority.dao.UserRoleMapper;
 import com.cyb.authority.domain.UserRole;
 import com.cyb.authority.service.UserRoleService;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -16,42 +15,36 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Override
 	public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userRoleMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int insert(UserRole record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userRoleMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(UserRole record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userRoleMapper.insertSelective(record);
 	}
 
 	@Override
 	public UserRole selectByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRoleMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(UserRole record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userRoleMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
 	public int updateByPrimaryKey(UserRole record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userRoleMapper.updateByPrimaryKey(record);
 	}
 
 	@Override
 	public List<UserRole> selectByUserId(String id) {
-		return null;
+		return userRoleMapper.selectByUserId(id);
 	}
 }

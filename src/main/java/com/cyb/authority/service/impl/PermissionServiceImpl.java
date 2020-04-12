@@ -14,37 +14,31 @@ public class PermissionServiceImpl implements PermissionService {
 
 	@Override
     public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return permissionMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int insert(Permission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return permissionMapper.insert(record);
 	}
 
 	@Override
 	public int insertSelective(Permission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return permissionMapper.insertSelective(record);
 	}
 
 	@Override
 	public Permission selectByPrimaryKey(String id) {
-
 		return permissionMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public int updateByPrimaryKeySelective(Permission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return permissionMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
 	public int updateByPrimaryKey(Permission record) {
-		// TODO Auto-generated method stub
-		return 0;
+		return permissionMapper.updateByPrimaryKey(record);
 	}
 }

@@ -7,4 +7,7 @@
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
   </resultMap>
 
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from permission where id = #{id,jdbcType=VARCHAR}
+  </select>
 </mapper>
