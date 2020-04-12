@@ -11,11 +11,7 @@ public interface UserService {
 
     int insert(User record, String basePath);
 
-    int insertSelective(User record);
-
     User selectByPrimaryKey(String id);
-
-    int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
 

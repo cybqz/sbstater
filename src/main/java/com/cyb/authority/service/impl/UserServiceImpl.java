@@ -4,7 +4,6 @@ import com.cyb.authority.dao.UserMapper;
 import com.cyb.authority.domain.User;
 import com.cyb.authority.service.UserService;
 import com.cyb.authority.utils.EncryptionDecrypt;
-import com.cyb.authority.validate.UserValidate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,14 +14,9 @@ public class UserServiceImpl implements UserService {
 	@Resource
 	private UserMapper userMapper;
 
-	@Resource
-	private UserValidate userValidate;
-
-
 	@Override
 	public int deleteByPrimaryKey(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+		return userMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
@@ -30,7 +24,7 @@ public class UserServiceImpl implements UserService {
 		String password = EncryptionDecrypt.encryptionMD5(record.getPassword());
 		record.setPassword(password);
 		Integer sex = record.getSex();
-		String image = "/headportrait/";
+		String image = basePath + "/headportrait/";
 		if(sex == 0) {
 			image += "gril.png";
 		}else {
@@ -42,20 +36,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int insertSelective(User record) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public User selectByPrimaryKey(String id) {
 		return userMapper.selectByPrimaryKey(id);
-	}
-
-	@Override
-	public int updateByPrimaryKeySelective(User record) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override

@@ -4,5 +4,6 @@ com.cyb.authority.config.RolePermissionServiceAutoConfig,\
 com.cyb.authority.config.PermissionServiceAutoConfig,\
 com.cyb.authority.config.UserRoleServiceAutoConfig,\
 com.cyb.authority.config.LoginServiceAutoConfig,\
-com.cyb.authority.config.UserServiceAutoConfig
+com.cyb.authority.config.UserServiceAutoConfig,\
+com.cyb.authority.config.RoleServiceAutoConfig
 
