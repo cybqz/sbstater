@@ -7,6 +7,7 @@ import com.cyb.authority.utils.EncryptionDecrypt;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service(value="userSerivce")
 public class UserServiceImpl implements UserService {
@@ -48,5 +49,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User selectByUserName(String username) {
 		return userMapper.selectByUserName(username);
+	}
+
+	@Override
+	public List<User> selectBySelective(User record){
+		return userMapper.selectBySelective(record);
 	}
 }

@@ -40,6 +40,11 @@
     where user_name = #{name,jdbcType=VARCHAR}
   </select>
 
+  <select id="selectBySelective" parameterType="com.cyb.authority.domain.User" resultMap="BaseResultMap">
+    select *
+    from user where 1 = 1
+  </select>
+
   <select id="queryRolesByName" parameterType="java.lang.String" resultType="java.lang.String">
     select name from role where id in
     (

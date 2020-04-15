@@ -16,7 +16,7 @@ public interface RolePermissionMapper {
 
     RolePermission selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(RolePermission record);
+    int updateBySelective(RolePermission record);
 
     int updateByPrimaryKey(RolePermission record);
 

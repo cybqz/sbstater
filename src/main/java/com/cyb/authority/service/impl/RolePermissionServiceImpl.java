@@ -34,8 +34,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 	}
 
 	@Override
-	public int updateByPrimaryKeySelective(RolePermission record) {
-		return rolePermissionMapper.updateByPrimaryKeySelective(record);
+	public int updateBySelective(RolePermission record) {
+		return rolePermissionMapper.updateBySelective(record);
 	}
 
 	@Override

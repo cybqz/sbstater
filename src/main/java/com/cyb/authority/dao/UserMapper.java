@@ -2,6 +2,8 @@ package com.cyb.authority.dao;
 
 import com.cyb.authority.domain.User;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 import java.util.Set;
 
 @Mapper
@@ -20,4 +22,6 @@ public interface UserMapper {
     User selectByUserName(String userName);
 
     User selectByPrimaryKey(String id);
+
+    List<User> selectBySelective(User record);
 }
