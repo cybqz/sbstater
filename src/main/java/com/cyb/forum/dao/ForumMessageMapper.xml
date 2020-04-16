@@ -145,6 +145,8 @@
       and content like concat('%',#{forumMessage.content,jdbcType=VARCHAR},'%')
     </if>
     order by create_date_time desc
-    limit #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    <if test="pageIndex != null and pageSize != null">
+      limit #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
   </select>
 </mapper>

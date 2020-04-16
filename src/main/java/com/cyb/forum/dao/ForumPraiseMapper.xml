@@ -63,6 +63,9 @@
     <if test="messageId != null and messageId != ''">
       and message_id = #{messageId,jdbcType=VARCHAR}
     </if>
-    order by create_date_time
+    order by create_date_time desc
+    <if test="pageIndex != null and pageSize != null">
+      limit #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
   </select>
 </mapper>
