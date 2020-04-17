@@ -1,5 +1,6 @@
 package com.cyb.forum.service;
 
+import com.cyb.common.pagenation.Pagenation;
 import com.cyb.forum.domain.ForumDiscuss;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface ForumDiscussService {
 
     ForumDiscuss selectByPrimaryKey(String id);
 
-    List<ForumDiscuss> selectSelective(ForumDiscuss record);
+    List<ForumDiscuss> selectSelective(ForumDiscuss record, Pagenation pagenation);
 }

@@ -57,15 +57,15 @@
   <select id="selectSelective" resultMap="BaseResultMap">
     select * from forum_praise
     where 1 = 1
-    <if test="userId != null and userId != ''">
-      and user_id = #{userId,jdbcType=VARCHAR}
+    <if test="forumPraise != null and forumPraise.userId != null and forumPraise.userId != ''">
+      and user_id = #{forumPraise.userId,jdbcType=VARCHAR}
     </if>
-    <if test="messageId != null and messageId != ''">
-      and message_id = #{messageId,jdbcType=VARCHAR}
+    <if test="forumPraise != null and forumPraise.messageId != null and forumPraise.messageId != ''">
+      and message_id = #{forumPraise.messageId,jdbcType=VARCHAR}
     </if>
     order by create_date_time desc
-    <if test="pageIndex != null and pageSize != null">
-      limit #{pageIndex,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    <if test="pagenation != null and pagenation.pageIndex != null and pagenation.pageSize != null">
+      limit #{pagenation.pageIndex,jdbcType=INTEGER}, #{pagenation.pageSize,jdbcType=INTEGER}
     </if>
   </select>
 </mapper>

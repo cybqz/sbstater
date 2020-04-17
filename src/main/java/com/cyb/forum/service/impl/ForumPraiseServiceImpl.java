@@ -1,5 +1,6 @@
 package com.cyb.forum.service.impl;
 
+import com.cyb.common.pagenation.Pagenation;
 import com.cyb.common.result.R;
 import com.cyb.forum.dao.ForumMessageMapper;
 import com.cyb.forum.dao.ForumPraiseMapper;
@@ -55,7 +56,14 @@ public class ForumPraiseServiceImpl implements ForumPraiseService {
     }
 
     @Override
-    public List<ForumPraise> selectSelective(ForumPraise record) {
-        return forumPraiseMapper.selectSelective(record);
+    public List<ForumPraise> selectSelective(ForumPraise record, Pagenation pagenation) {
+
+        if(null == record){
+            record = new ForumPraise();
+        }
+        if(null == pagenation){
+            pagenation = new Pagenation(1, 10);
+        }
+        return forumPraiseMapper.selectSelective(record, pagenation);
     }
 }
