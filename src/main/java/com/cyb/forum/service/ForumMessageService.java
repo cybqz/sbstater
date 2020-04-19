@@ -1,6 +1,6 @@
 package com.cyb.forum.service;
 
-import com.cyb.common.pagenation.Pagenation;
+import com.cyb.common.pagination.Pagination;
 import com.cyb.forum.domain.ForumMessage;
 
 import java.util.List;
@@ -20,8 +20,8 @@ public interface ForumMessageService {
     /**
      *
      * @param forumMessage
-     * @param pagenation
+     * @param pagination
      * @return
      */
-    List<ForumMessage> selectSelective(ForumMessage forumMessage, Pagenation pagenation);
+    List<ForumMessage> selectSelective(ForumMessage forumMessage, Pagination pagination);
 }

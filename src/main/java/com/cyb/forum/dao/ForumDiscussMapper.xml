@@ -70,8 +70,8 @@
       and user_id = #{userId,jdbcType=VARCHAR}
     </if>
     order by create_date_time desc
-    <if test="pagenation != null and pagenation.pageIndex != null and pagenation.pageSize != null">
-      limit #{pagenation.pageIndex,jdbcType=INTEGER}, #{pagenation.pageSize,jdbcType=INTEGER}
+    <if test="pagination != null and pagination.pageIndex != null and pagination.pageSize != null">
+      limit #{pagination.offset,jdbcType=INTEGER}, #{pagination.pageSize,jdbcType=INTEGER}
     </if>
   </select>
 </mapper>

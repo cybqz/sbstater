@@ -1,6 +1,6 @@
 package com.cyb.forum.service.impl;
 
-import com.cyb.common.pagenation.Pagenation;
+import com.cyb.common.pagination.Pagination;
 import com.cyb.forum.dao.ForumDiscussMapper;
 import com.cyb.forum.domain.ForumDiscuss;
 import com.cyb.forum.service.ForumDiscussService;
@@ -35,13 +35,13 @@ public class ForumDiscussServiceImpl implements ForumDiscussService {
     }
 
     @Override
-    public List<ForumDiscuss> selectSelective(ForumDiscuss record, Pagenation pagenation) {
+    public List<ForumDiscuss> selectSelective(ForumDiscuss record, Pagination pagination) {
         if(null == record){
             record = new ForumDiscuss();
         }
-        if(null == pagenation){
-            pagenation = new Pagenation(1, 10);
+        if(null == pagination){
+            pagination = new Pagination(1, 10);
         }
-        return forumDiscussMapper.selectSelective(record, pagenation);
+        return forumDiscussMapper.selectSelective(record, pagination);
     }
 }

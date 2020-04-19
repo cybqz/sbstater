@@ -1,6 +1,6 @@
 package com.cyb.forum.service.impl;
 
-import com.cyb.common.pagenation.Pagenation;
+import com.cyb.common.pagination.Pagination;
 import com.cyb.forum.dao.ForumDiscussMapper;
 import com.cyb.forum.dao.ForumMessageMapper;
 import com.cyb.forum.dao.ForumPraiseMapper;
@@ -49,14 +49,14 @@ public class ForumMessageServiceImpl implements ForumMessageService {
     }
 
     @Override
-    public List<ForumMessage> selectSelective(ForumMessage forumMessage, Pagenation pagenation) {
+    public List<ForumMessage> selectSelective(ForumMessage forumMessage, Pagination pagination) {
 
         if(null == forumMessage){
             forumMessage = new ForumMessage();
         }
-        if(null == pagenation){
-            pagenation = new Pagenation(1, 10);
+        if(null == pagination){
+            pagination = new Pagination(1, 10);
         }
-        return messageMapper.selectSelective(forumMessage, pagenation);
+        return messageMapper.selectSelective(forumMessage, pagination);
     }
 }

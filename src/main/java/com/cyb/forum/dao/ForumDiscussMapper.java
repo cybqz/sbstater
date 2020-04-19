@@ -1,6 +1,6 @@
 package com.cyb.forum.dao;
 
-import com.cyb.common.pagenation.Pagenation;
+import com.cyb.common.pagination.Pagination;
 import com.cyb.forum.domain.ForumDiscuss;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,5 +22,5 @@ public interface ForumDiscussMapper {
 
     ForumDiscuss selectByPrimaryKey(String id);
 
-    List<ForumDiscuss> selectSelective(ForumDiscuss forumDiscuss, Pagenation pagenation);
+    List<ForumDiscuss> selectSelective(ForumDiscuss forumDiscuss, Pagination pagination);
 }
