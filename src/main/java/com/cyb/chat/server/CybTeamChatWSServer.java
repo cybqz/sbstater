@@ -12,6 +12,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -100,18 +101,18 @@ public class CybTeamChatWSServer {
                             //发送消息到群内每个用户
                             for(String userId : TEAM_INFO_MAP.get(from_team_id)){
 
-                                if (userId.equals(from_id)){
+                                /*if (userId.equals(from_id)){
                                     continue;
-                                }
+                                }*/
                                 String tempKey = from_team_id + "_" + userId;
                                 if(USER_WEB_SOCKET_MAP.containsKey(tempKey)){
                                     //追加发送人(防止串改)
                                     messageObject.put("fromUserId",this.userId);
+                                    String tempName = "none";
                                     if(USER_INFO_MAP.containsKey(from_id)){
-                                        messageObject.put("fromName",USER_INFO_MAP.get(from_id));
-                                    }else{
-                                        messageObject.put("fromName","none");
+                                        tempName = USER_INFO_MAP.get(from_id);
                                     }
+                                    messageObject.put("fromName",tempName);
                                     USER_WEB_SOCKET_MAP.get(tempKey).sendMessage(messageObject.toJSONString());
                                 }else{
                                     log.error("请求的:"+tempKey+"不在该服务器上");
@@ -187,12 +188,15 @@ public class CybTeamChatWSServer {
             USER_TEAM_INFO_MAP.put(userId, team);
             USER_INFO_MAP.put(userId, userName);
 
-            if(TEAM_INFO_MAP.containsKey(team)){
-                List<String> teamList = TEAM_INFO_MAP.get(team);
-                teamList.add(userId);
-                TEAM_INFO_MAP.put(team, teamList);
-            }
+            List<String> teamList = new ArrayList<>();
 
+            if(TEAM_INFO_MAP.containsKey(team)){
+                teamList = TEAM_INFO_MAP.get(team);
+            }else{
+                teamList = new ArrayList<>();
+            }
+            teamList.add(userId);
+            TEAM_INFO_MAP.put(team, teamList);
             log.info("添加用户成功");
             return R.success("success");
         }catch (Exception e){
