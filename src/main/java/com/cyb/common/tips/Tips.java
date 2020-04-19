@@ -1,8 +1,7 @@
 package com.cyb.common.tips;
 
-import com.cyb.common.pagenation.Pagenation;
+import com.cyb.common.pagination.Pagination;
 import lombok.Getter;
-
 import javax.servlet.http.HttpServletResponse;
 
 @Getter
@@ -31,7 +30,7 @@ public class Tips {
 	/**
 	 * 分页信息
 	 */
-	private Pagenation pagenation;
+	private Pagination pagination;
 
 	/**
 	 * 返回数据
@@ -94,8 +93,8 @@ public class Tips {
 		this.code = code;
 	}
 
-	public void setPagenation(Pagenation pagenation) {
-		this.pagenation = pagenation;
+	public void setPagination(Pagination pagination) {
+		this.pagination = pagination;
 	}
 
 	public void setData(Object data) {
