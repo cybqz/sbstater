@@ -1,6 +1,7 @@
 package com.cyb.authority.service;
 
 import com.cyb.authority.domain.User;
+import com.cyb.common.tips.Tips;
 
 import java.util.List;
 
@@ -17,7 +18,9 @@ public interface UserService {
 
     int updateByPrimaryKey(User record);
 
-    User selectByUserName(String username);
+    Tips updatePasswordById(String userId, String password, String oldPassword, boolean againLogin);
+
+    User selectByUserName(String userName);
 
     List<User> selectBySelective(User record);
 }

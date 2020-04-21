@@ -26,8 +26,7 @@ public interface LoginService {
 
 	/**
 	 * 登出
-	 * @param user
 	 * @return
 	 */
-	public Tips logout(User user);
+	public Tips logout();
 }
