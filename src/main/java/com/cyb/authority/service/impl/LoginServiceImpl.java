@@ -37,6 +37,7 @@ public class LoginServiceImpl implements LoginService {
 		Tips tips = new Tips("登陆失败", true, false);
 		validateParam(user, tips);
 		if(tips.isValidate()){
+			tips.setValidate(false);
 			JSONObject result = commonLogin(user);
 			if(null != result && result.containsKey("authToken")){
 				tips = new Tips("登录成功！", true, result);
@@ -53,6 +54,7 @@ public class LoginServiceImpl implements LoginService {
 		Tips tips = new Tips("登陆失败", true, false);
 		validateParam(user, tips);
 		if(tips.isValidate()){
+			tips.setValidate(false);
 			User userTemp = userServices.selectByUserName(user.getUserName());
 			if(null != userTemp){
 				List<UserRole> userRoleList = userRoleMapper.selectByUserId(userTemp.getId());
