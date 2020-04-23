@@ -16,7 +16,6 @@
 
   <select id="insert" parameterType="com.cyb.authority.domain.User">
     insert into user
-    column
         (id, name, user_name, password, phone, email, sex, address, image, introduce)
     values
         (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},#{userName,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
