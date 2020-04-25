@@ -86,6 +86,8 @@ public class Tips {
 		this.validate = validate;
 		if(this.validate){
 			this.code = HttpServletResponse.SC_OK;
+		}else {
+			this.code = HttpServletResponse.SC_BAD_REQUEST;
 		}
 	}
 
