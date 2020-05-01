@@ -29,7 +29,6 @@
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>cyb-spring-boot-stater-common</groupId>
 			<artifactId>common</artifactId>
@@ -49,7 +48,6 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-
 	</dependencies>
 
 	<build>
