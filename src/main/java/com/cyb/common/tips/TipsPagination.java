@@ -1,13 +1,14 @@
 package com.cyb.common.tips;
 
+import com.cyb.common.pagination.Pagination;
 import lombok.Getter;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 公共返回结果封装
+ * 分页公共返回结果封装
  */
 @Getter
-public class Tips {
+public class TipsPagination<E> {
 
 	/**
 	 * 消息
@@ -30,45 +31,21 @@ public class Tips {
 	private Integer code = HttpServletResponse.SC_BAD_REQUEST;
 
 	/**
-	 * 返回数据
+	 * 分页信息
 	 */
-	private Object data;
-	
-	public Tips(String msg, boolean validate) {
-		super();
-		this.msg = msg;
-		this.validate = validate;
-		if(validate){
-			this.code = HttpServletResponse.SC_OK;
-		}
-	}
-	
-	public Tips(String msg, boolean validate, Object data) {
-		super();
-		this.msg = msg;
-		this.data = data;
-		this.validate = validate;
-		if(validate){
-			this.code = HttpServletResponse.SC_OK;
-		}
-	}
-	
-	public Tips(String msg, boolean show, boolean validate) {
-		super();
-		this.msg = msg;
-		this.show = show;
-		this.validate = validate;
-		if(validate){
-			this.code = HttpServletResponse.SC_OK;
-		}
-	}
+	private Pagination<E> pagination;
 
-	public Tips(String msg, Integer code, boolean show, boolean validate) {
+	public TipsPagination() {}
+
+	public TipsPagination(String msg, Integer code, boolean validate, Pagination<E> pagination) {
 		super();
 		this.msg = msg;
 		this.code = code;
-		this.show = show;
 		this.validate = validate;
+		this.pagination = pagination;
+		if(validate){
+			this.code = HttpServletResponse.SC_OK;
+		}
 	}
 
 	public void setMsg(String msg) {
@@ -92,7 +69,13 @@ public class Tips {
 		this.code = code;
 	}
 
-	public void setData(Object data) {
-		this.data = data;
+	public void setPagination(Pagination<E> pagination) {
+		this.pagination = pagination;
+	}
+
+	public void convertFromTips(Tips tips){
+		this.setMsg(tips.getMsg());
+		this.setCode(tips.getCode());
+		this.setValidate(tips.isValidate());
 	}
 }
