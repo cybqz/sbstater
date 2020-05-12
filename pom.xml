@@ -2,17 +2,17 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>cyb-spring-boot-stater-parent</groupId>
+		<groupId>cyb.spring.boot.stater.parent</groupId>
 		<artifactId>parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>beast-mybatis</groupId>
-	<artifactId>beast-mybatis-spring-boot-starter</artifactId>
+	<groupId>beast.mybatis</groupId>
+	<artifactId>spring-boot-starter</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>beast-mybatis-spring-boot-starter</name>
+	<name>spring-boot-starter</name>
 	<description>beast-mybatis-spring-boot-starter(JDK8)</description>
 
 	<developers>
@@ -24,25 +24,20 @@
         </developer>
     </developers>
 
-	<properties>
-		<fastmybatis.version>1.9.0</fastmybatis.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
-			<groupId>cyb-spring-boot-stater-common</groupId>
+			<groupId>cyb.spring.boot.stater.common</groupId>
 			<artifactId>common</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- beastmybatis -->
         <dependency>
-			<groupId>beast-mybatis</groupId>
-			<artifactId>beast-mybatis-core</artifactId>
+			<groupId>beast.mybatis</groupId>
+			<artifactId>core</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
         </dependency>
-        
-		<!-- Test dependencies -->
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
