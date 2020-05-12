@@ -1,3 +1,3 @@
-# sbstater
+# chat
 
 spring boot chat stater!
