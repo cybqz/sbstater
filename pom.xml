@@ -11,7 +11,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>cyb-spring-boot-stater-parent</groupId>
+    <groupId>cyb.spring.boot.stater.parent</groupId>
     <artifactId>parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
