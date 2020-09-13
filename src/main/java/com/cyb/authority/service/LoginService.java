@@ -29,4 +29,11 @@ public interface LoginService {
 	 * @return
 	 */
 	public Tips logout();
+
+	/**
+	 * 登出
+	 * @param authToken
+	 * @return
+	 */
+	public Tips logout(String authToken);
 }

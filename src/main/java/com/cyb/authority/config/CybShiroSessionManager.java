@@ -37,7 +37,6 @@ public class CybShiroSessionManager extends DefaultWebSessionManager {
         String sessionId = WebUtils.toHttp(request).getHeader(AUTHORIZATION);
         if(StringUtils.isEmpty(sessionId)){
             //如果没有携带id参数则按照父类的方式在cookie进行获取
-            System.out.println("super："+super.getSessionId(request, response));
             return super.getSessionId(request, response);
         }else{
             System.out.println("sessionId："+sessionId);

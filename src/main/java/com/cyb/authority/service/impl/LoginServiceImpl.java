@@ -13,6 +13,7 @@ import com.cyb.common.tips.Tips;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +86,27 @@ public class LoginServiceImpl implements LoginService {
 		if(subject.isAuthenticated()) {
 			subject.logout();
 			tips = new Tips("退出成功！", true);
+		}
+		return tips;
+	}
+
+	@Override
+	public Tips logout(String authToken) {
+		Tips tips = new Tips("没有登陆，退出失败", false);
+		if(StringUtils.isEmpty(authToken)) {
+			tips.setMsg("参数不能为空");
+		}else {
+			Subject subject = SecurityUtils.getSubject();
+			SecurityManager securityManager = SecurityUtils.getSecurityManager();
+			Serializable serializable = subject.getSession().getId();
+
+			System.out.println(JSONObject.toJSONString(subject));
+			System.out.println(JSONObject.toJSONString(serializable));
+			System.out.println(JSONObject.toJSONString(securityManager));
+			/*if(subject.isAuthenticated()) {
+				subject.logout();
+				tips = new Tips("退出成功！", true);
+			}*/
 		}
 		return tips;
 	}
