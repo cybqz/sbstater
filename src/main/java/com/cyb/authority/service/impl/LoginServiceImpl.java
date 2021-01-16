@@ -12,11 +12,11 @@ import com.cyb.authority.utils.EncryptionDecrypt;
 import com.cyb.common.tips.Tips;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
 			if(null != result && result.containsKey("authToken")){
 				tips = new Tips("登录成功！", true, result);
 			}else{
-				tips.setData(result);
+				tips = new Tips(result.getString("msg"), true, false);
 			}
 		}
 		return tips;
@@ -152,7 +152,9 @@ public class LoginServiceImpl implements LoginService {
 
 			result.put("success", true);
 			result.put("authToken", authToken);
-		} catch (Exception e) {
+		}catch (UnknownAccountException e){
+			result.put("msg", "未找到用户信息");
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
