@@ -5,35 +5,38 @@ import java.util.List;
 /**
  * 分页封装类
  */
-public class Pagination<Entity> {
+public class PaginationV1<Entity> {
 
 	private int limit;
-	
+
+	private int start;
+
 	private int pageCount;
 
-	private int pageIndex = 1;
+	private int pageIndex;
 
 	private List<Entity> data;
-	
+
 	private long total;
 
 	public boolean isFirstPage = false;
 	public boolean isLasePage = false;
 
-	public Pagination() {
+	public PaginationV1() {
 		this.limit = 5;
+		this.start = 0;
 	}
 
-	public Pagination(int limit, int pageIndex) {
+	public PaginationV1(int limit, int start) {
 		if(limit > 0 && limit <= 50) {
 			this.limit = limit;
 		}else{
 			this.limit = 5;
 		}
-		if(pageIndex <= 1) {
-			this.pageIndex = 1;
+		if(start <= 0) {
+			this.start = 0;
 		}else{
-			this.pageIndex = pageIndex;
+			this.start = start;
 		}
 	}
 
@@ -46,6 +49,18 @@ public class Pagination<Entity> {
 			this.limit = limit;
 		}else{
 			this.limit = 5;
+		}
+	}
+	
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		if(start <= 0) {
+			this.start = 0;
+		}else{
+			this.start = start;
 		}
 	}
 
@@ -62,7 +77,7 @@ public class Pagination<Entity> {
 	}
 
 	public void setPageIndex(int pageIndex) {
-		if(pageIndex <= 1){
+		if(pageIndex <= 0){
 			pageIndex = 1;
 		}
 		this.pageIndex = pageIndex;
@@ -87,8 +102,9 @@ public class Pagination<Entity> {
 		}else {
 			this.pageCount = (int) (total/this.limit)+1;
 		}
-		this.isFirstPage = this.pageIndex == 1;
-		this.isLasePage = this.pageIndex == this.pageCount;
+		this.isFirstPage = this.start == 0;
+		this.pageIndex = (start / limit) + 1;
+		this.isLasePage = this.start + 1 == this.pageCount;
 		this.pageCount = (int) (this.limit == 0 ? 1 : (total + this.limit - 1) / this.limit);
 	}
 }
