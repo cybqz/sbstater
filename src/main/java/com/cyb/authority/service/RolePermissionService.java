@@ -1,25 +1,39 @@
 package com.cyb.authority.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cyb.authority.dao.RolePermissionMapper;
 import com.cyb.authority.domain.RolePermission;
-
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 角色-权限Services
+ * @Author 陈迎博
+ * @Description 角色权限服务层
+ * @Date 2021/1/21
  */
-public interface RolePermissionService {
+@Slf4j
+@Service
+public class RolePermissionService extends ServiceImpl<RolePermissionMapper, RolePermission> {
 
-    int deleteByPrimaryKey(String id);
+	@Resource
+	private RolePermissionMapper rolePermissionMapper;
 
-    int insert(RolePermission record);
+    public int deleteById(String id) {
+		return rolePermissionMapper.deleteById(id);
+	}
 
-    int insertSelective(RolePermission record);
+	public int insert(RolePermission record) {
+		return rolePermissionMapper.insert(record);
+	}
 
-    RolePermission selectByPrimaryKey(String id);
+	public RolePermission selectById(String id) {
+		return rolePermissionMapper.selectById(id);
+	}
 
-    int updateBySelective(RolePermission record);
-
-    int updateByPrimaryKey(RolePermission record);
-
-    List<RolePermission> selectByRoleId(String roleId);
+	public List<RolePermission> selectListByRoleIds(List<String> roleIds) {
+		return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda().in(RolePermission::getRoleId, roleIds));
+	}
 }

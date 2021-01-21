@@ -1,20 +1,14 @@
 package com.cyb.authority.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cyb.authority.domain.Role;
 import org.apache.ibatis.annotations.Mapper;
 
+/**
+ * @Author 陈迎博
+ * @Description 角色映射类
+ * @Date 2021/1/21
+ */
 @Mapper
-public interface RoleMapper {
-
-    int deleteByPrimaryKey(String id);
-
-    int insert(Role record);
-
-    int insertSelective(Role record);
-
-    Role selectByPrimaryKey(String id);
-
-    int updateByPrimaryKeySelective(Role record);
-
-    int updateByPrimaryKey(Role record);
+public interface RoleMapper  extends BaseMapper<Role> {
 }

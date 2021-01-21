@@ -10,11 +10,18 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
+/**
+ * @Author 陈迎博
+ * @Description 用户验证服务层
+ * @Date 2021/1/21
+ */
 @Component
 public class UserValidate {
 
-	@Autowired
-	private UserService userSerivces;
+	@Resource
+	private UserService userService;
 	
 	/**
 	 * 获取当前已登录且验证通过的用户信息
@@ -59,7 +66,7 @@ public class UserValidate {
 
 	private User cybAuthorityUserToUser (CybAuthorityUser cybAuthorityUser){
 		if(null != cybAuthorityUser){
-			return userSerivces.selectByUserName(cybAuthorityUser.getName());
+			return userService.selectByUserName(cybAuthorityUser.getName());
 		}
 		return null;
 	}

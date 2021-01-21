@@ -1,27 +1,16 @@
 package com.cyb.authority.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cyb.authority.domain.User;
 import org.apache.ibatis.annotations.Mapper;
-
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @Author 陈迎博
+ * @Description 用户映射类
+ * @Date 2021/1/21
+ */
 @Mapper
-public interface UserMapper {
-
-    int deleteByPrimaryKey(String id);
-
-    void insert(User record);
-
-    int updateByPrimaryKey(User record);
-
-	Set<String> queryRolesByName(String userName);
-
-	Set<String> queryPermissionByName(String userName);
-
-    User selectByUserName(String userName);
-
-    User selectByPrimaryKey(String id);
-
-    List<User> selectBySelective(User record);
+public interface UserMapper extends BaseMapper<User> {
 }

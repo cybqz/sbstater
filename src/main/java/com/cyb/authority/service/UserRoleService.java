@@ -1,24 +1,39 @@
 package com.cyb.authority.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cyb.authority.dao.UserRoleMapper;
 import com.cyb.authority.domain.UserRole;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 用户-角色 Services
+ * @Author 陈迎博
+ * @Description 用户角色服务层
+ * @Date 2021/1/21
  */
-public interface UserRoleService {
+@Slf4j
+@Service
+public class UserRoleService extends ServiceImpl<UserRoleMapper, UserRole> {
 
-    int deleteByPrimaryKey(String id);
+	@Resource
+	private UserRoleMapper userRoleMapper;
 
-    int insert(UserRole record);
+	public int deleteById(String id) {
+		return userRoleMapper.deleteById(id);
+	}
 
-    int insertSelective(UserRole record);
+	public int insert(UserRole record) {
+		return userRoleMapper.insert(record);
+	}
 
-    UserRole selectByPrimaryKey(String id);
+	public UserRole selectById(String id) {
+		return userRoleMapper.selectById(id);
+	}
 
-    int updateByPrimaryKeySelective(UserRole record);
-
-    int updateByPrimaryKey(UserRole record);
-
-    List<UserRole> selectByUserId(String id);
+	public List<UserRole> selectByUserId(String userId) {
+		return userRoleMapper.selectList(new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userId));
+	}
 }
