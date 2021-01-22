@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @Author 陈迎博
@@ -12,6 +13,7 @@ import lombok.Data;
  * @Date 2021/1/21
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "user_role")
 public class UserRole {

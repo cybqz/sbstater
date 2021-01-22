@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.cyb.authority.constant.SexEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
  * @Date 2021/1/21
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "user")
 public class User implements Serializable {

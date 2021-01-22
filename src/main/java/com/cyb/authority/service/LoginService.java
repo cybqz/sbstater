@@ -22,8 +22,8 @@ import java.util.List;
  * @Description 登录服务层
  * @Date 2021/1/21
  */
-@Service(value="loginService")
-public class LoginService implements LoginService {
+@Service
+public class LoginService {
 
 	@Resource
 	private UserService userServices;
@@ -34,7 +34,6 @@ public class LoginService implements LoginService {
 	@Resource
 	private UserRoleService userRoleService;
 
-	@Override
 	public Tips login(User user) {
 		Tips tips = new Tips("登陆失败", true, false);
 		validateParam(user, tips);
@@ -50,7 +49,6 @@ public class LoginService implements LoginService {
 		return tips;
 	}
 
-	@Override
 	public Tips adminLogin(User user, String roleName){
 
 		Tips tips = new Tips("登陆失败", true, false);
@@ -80,7 +78,6 @@ public class LoginService implements LoginService {
 		return tips;
 	}
 
-	@Override
 	public Tips logout() {
 		Tips tips = new Tips("没有登陆，退出失败", false);
 		Subject subject = SecurityUtils.getSubject();
@@ -91,8 +88,7 @@ public class LoginService implements LoginService {
 		return tips;
 	}
 
-	@Override
-	public Tips logout(String authToken) {
+	public Tips logoutWithToken(String authToken) {
 		Tips tips = new Tips("没有登陆，退出失败", false);
 		if(StringUtils.isEmpty(authToken)) {
 			tips.setMsg("参数不能为空");
@@ -136,6 +132,12 @@ public class LoginService implements LoginService {
 		}
 	}
 
+	/**
+	 * @Author 陈迎博
+	 * @Title 处理登录逻辑
+	 * @Description 处理登录逻辑
+	 * @Date 2021/1/22
+	 */
 	private JSONObject doLogin(String userName, String password){
 
 		JSONObject result = new JSONObject();
