@@ -3,8 +3,6 @@ package com.cyb.authority.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cyb.authority.domain.User;
 import org.apache.ibatis.annotations.Mapper;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @Author 陈迎博
