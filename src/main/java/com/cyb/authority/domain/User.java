@@ -7,8 +7,8 @@ import com.cyb.authority.constant.SexEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @Author 陈迎博
@@ -50,4 +50,10 @@ public class User implements Serializable {
 
     @TableField(value = "introduce")
     private String introduce;
+
+    @TableField(value = "create_date_time")
+    private LocalDateTime createDateTime;
+
+    @TableField(value = "update_date_time")
+    private LocalDateTime updateDateTime;
 }
