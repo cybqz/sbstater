@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author 陈迎博
  * @Description 角色-权限模型
@@ -29,4 +31,10 @@ public class RolePermission {
 
     @TableField(value = "remarks")
     private String remarks;
+
+    @TableField(value = "create_date_time")
+    private LocalDateTime createDateTime;
+
+    @TableField(value = "update_date_time")
+    private LocalDateTime updateDateTime;
 }

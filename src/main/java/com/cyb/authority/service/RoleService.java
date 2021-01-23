@@ -1,18 +1,21 @@
 package com.cyb.authority.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.RoleMapper;
 import com.cyb.authority.domain.Role;
 import com.cyb.authority.domain.UserRole;
+import com.cyb.common.pagination.Pagination;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author 陈迎博
@@ -41,9 +44,44 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         return roleMapper.selectById(id);
     }
 
+    public Role selectByName(String name){
+        if(StringUtils.isBlank(name)){
+            return null;
+        }else {
+            return roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, name));
+        }
+    }
+
+    public Integer selectCount(Role role){
+        return roleMapper.selectCount(new QueryWrapper<Role>().lambda()
+                .eq(StringUtils.isNotBlank(role.getName()), Role::getName, role.getName())
+        );
+    }
+
     public List<Role> selectListByIds(List<String> idList){
         List<Role> roleList = roleMapper.selectList(new QueryWrapper<Role>().lambda().in(Role::getId, idList));
         return roleList;
+    }
+
+    /**
+     * @Author 陈迎博
+     * @Title 分页查询
+     * @Description 分页查询
+     * @Date 2021/1/16
+     */
+    public IPage<Role> selectPage(Role record, Pagination pagination) {
+
+        LambdaQueryWrapper<Role> queryWrapper = queryWrapper = new LambdaQueryWrapper<Role>();
+        queryWrapper.orderByDesc(Role::getCreateDateTime);
+        if(null != record){
+            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getName()), Role::getName, record.getName());
+        }
+
+        Page page = null;
+        if(null != pagination){
+            page = new Page(pagination.getPageIndex(), pagination.getLimit());
+        }
+        return roleMapper.selectPage(page, queryWrapper);
     }
 
     public List<Role> selectListByUserId(String userId){
