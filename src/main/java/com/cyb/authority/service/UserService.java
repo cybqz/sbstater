@@ -125,7 +125,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	 * @Description
 	 * @Date 2021/1/22
 	 */
-	public Integer selectCount(User user){
+	public int selectCount(User user){
 
 		return userMapper.selectCount(new QueryWrapper<User>().lambda()
 				.like(StringUtils.isNotBlank(user.getName()), User::getName, user.getName())

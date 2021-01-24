@@ -52,15 +52,99 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         }
     }
 
-    public Integer selectCount(Role role){
+    public int selectCount(Role role){
         return roleMapper.selectCount(new QueryWrapper<Role>().lambda()
                 .eq(StringUtils.isNotBlank(role.getName()), Role::getName, role.getName())
         );
     }
 
-    public List<Role> selectListByIds(List<String> idList){
-        List<Role> roleList = roleMapper.selectList(new QueryWrapper<Role>().lambda().in(Role::getId, idList));
-        return roleList;
+    /**
+     * @Author 陈迎博
+     * @Title 查询用户未拥有角色总数
+     * @Description
+     * @Date 2021/1/24
+     */
+    public int selectCountHavNo(String userId){
+        if(StringUtils.isNotBlank(userId)){
+            //查询用户已拥有的角色
+            List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
+            if(!CollectionUtils.isEmpty(userRoleList)){
+
+                List<String> roleIds = new ArrayList<String>(userRoleList.size());
+                for(UserRole ur : userRoleList){
+                    roleIds.add(ur.getRoleId());
+                }
+                return roleMapper.selectCount(new QueryWrapper<Role>().lambda().notIn(Role::getId, roleIds));
+            }else{
+                return roleMapper.selectCount(null);
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * @Author 陈迎博
+     * @Title 分页查询用户已拥有角色
+     * @Description 分页查询用户已拥有角色
+     * @Date 2021/1/16
+     */
+    public IPage<Role> selectPageHav(String userId, Pagination pagination) {
+
+        if(StringUtils.isNotBlank(userId)){
+
+            LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<Role>()
+                    .orderByDesc(Role::getCreateDateTime);
+
+            //查询用户已拥有的角色
+            List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
+            if(!CollectionUtils.isEmpty(userRoleList)){
+
+                List<String> roleIds = new ArrayList<String>(userRoleList.size());
+                for(UserRole ur : userRoleList){
+                    roleIds.add(ur.getRoleId());
+                }
+                queryWrapper.in(Role::getId, roleIds);
+            }
+            Page page = null;
+            if(null != pagination){
+                page = new Page(pagination.getPageIndex(), pagination.getLimit());
+            }
+            return roleMapper.selectPage(page, queryWrapper);
+        }
+        return null;
+    }
+
+    /**
+     * @Author 陈迎博
+     * @Title 分页查询用户未拥有角色
+     * @Description 分页查询用户未拥有角色
+     * @Date 2021/1/16
+     */
+    public IPage<Role> selectPageHavNo(String userId, Pagination pagination) {
+
+        if(StringUtils.isNotBlank(userId)){
+
+            LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<Role>()
+                    .orderByDesc(Role::getCreateDateTime);
+
+            //查询用户已拥有的角色
+            List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
+            if(!CollectionUtils.isEmpty(userRoleList)){
+
+                List<String> roleIds = new ArrayList<String>(userRoleList.size());
+                for(UserRole ur : userRoleList){
+                    roleIds.add(ur.getRoleId());
+                }
+
+                queryWrapper.notIn(Role::getId, roleIds);
+            }
+            Page page = null;
+            if(null != pagination){
+                page = new Page(pagination.getPageIndex(), pagination.getLimit());
+            }
+            return roleMapper.selectPage(page, queryWrapper);
+        }
+        return null;
     }
 
     /**
@@ -101,5 +185,10 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         }
 
         return null;
+    }
+
+    public List<Role> selectListByIds(List<String> idList){
+        List<Role> roleList = roleMapper.selectList(new QueryWrapper<Role>().lambda().in(Role::getId, idList));
+        return roleList;
     }
 }

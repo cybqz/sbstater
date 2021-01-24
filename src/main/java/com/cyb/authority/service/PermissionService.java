@@ -46,7 +46,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 		}
 	}
 
-	public Integer selectCount(Permission permission){
+	public int selectCount(Permission permission){
     	return permissionMapper.selectCount(new QueryWrapper<Permission>().lambda()
 				.eq(StringUtils.isNotBlank(permission.getName()), Permission::getName, permission.getName())
 		);
