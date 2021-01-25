@@ -54,21 +54,6 @@ public class UserRoleService extends ServiceImpl<UserRoleMapper, UserRole> {
 
 	/**
 	 * @Author 陈迎博
-	 * @Title 查询用户已拥有角色总数
-	 * @Description
-	 * @Date 2021/1/24
-	 */
-	public int selectCountByUserId(String userId){
-		if(StringUtils.isNotBlank(userId)){
-			return userRoleMapper.selectCount(new QueryWrapper<UserRole>().lambda()
-					.eq(UserRole::getUserId, userId)
-			);
-		}
-		return 0;
-	}
-
-	/**
-	 * @Author 陈迎博
 	 * @Title 分页查询
 	 * @Description 分页查询
 	 * @Date 2021/1/16

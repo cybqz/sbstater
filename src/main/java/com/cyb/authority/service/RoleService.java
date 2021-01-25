@@ -111,7 +111,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
             }
             return roleMapper.selectPage(page, queryWrapper);
         }
-        return null;
+        return new Page<Role>();
     }
 
     /**
@@ -144,7 +144,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
             }
             return roleMapper.selectPage(page, queryWrapper);
         }
-        return null;
+        return new Page<Role>();
     }
 
     /**

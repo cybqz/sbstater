@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.RolePermissionMapper;
 import com.cyb.authority.domain.RolePermission;
+import com.cyb.authority.domain.UserRole;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,5 +37,31 @@ public class RolePermissionService extends ServiceImpl<RolePermissionMapper, Rol
 
 	public List<RolePermission> selectListByRoleIds(List<String> roleIds) {
 		return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda().in(RolePermission::getRoleId, roleIds));
+	}
+
+	public int selectCount(RolePermission rolePermission){
+		return rolePermissionMapper.selectCount(new QueryWrapper<RolePermission>().lambda()
+				.eq(StringUtils.isNotBlank(rolePermission.getRoleId()), RolePermission::getRoleId, rolePermission.getRoleId())
+				.eq(StringUtils.isNotBlank(rolePermission.getPermissionId()), RolePermission::getPermissionId, rolePermission.getPermissionId())
+		);
+	}
+
+	public RolePermission selectOne(RolePermission rolePermission){
+		return rolePermissionMapper.selectOne(new QueryWrapper<RolePermission>().lambda()
+				.eq(StringUtils.isNotBlank(rolePermission.getRoleId()), RolePermission::getRoleId, rolePermission.getRoleId())
+				.eq(StringUtils.isNotBlank(rolePermission.getPermissionId()), RolePermission::getPermissionId, rolePermission.getPermissionId())
+		);
+	}
+
+	public List<RolePermission> selectByPermissionId(String permissionId) {
+    	return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda()
+				.eq(RolePermission::getPermissionId, permissionId)
+		);
+	}
+
+	public List<RolePermission> selectByRoleId(String roleId) {
+    	return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda()
+				.eq(RolePermission::getRoleId, roleId)
+		);
 	}
 }
