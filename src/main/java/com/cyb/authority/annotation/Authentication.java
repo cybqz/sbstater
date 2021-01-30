@@ -14,6 +14,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Authentication {
 
+    //是否提示
+    boolean isShowTips() default false;
+
     //名称
     String name() default "";
 
