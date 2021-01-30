@@ -176,7 +176,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
 
             List<String> idList = new ArrayList<String>(userRoleList.size());
             for(UserRole ur : userRoleList){
-                idList.add(ur.getId());
+                idList.add(ur.getRoleId());
             }
 
             //查询角色信息并返回结果
