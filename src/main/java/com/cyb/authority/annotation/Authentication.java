@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface Authentication {
 
     //是否提示
-    boolean isShowTips() default false;
+    boolean isShowTips() default true;
 
     //名称
     String name() default "";
