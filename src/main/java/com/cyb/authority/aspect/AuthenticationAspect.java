@@ -1,8 +1,12 @@
 package com.cyb.authority.aspect;
 
 import com.cyb.authority.annotation.Authentication;
+import com.cyb.authority.domain.Permission;
 import com.cyb.authority.domain.Role;
+import com.cyb.authority.domain.RolePermission;
 import com.cyb.authority.domain.User;
+import com.cyb.authority.service.PermissionService;
+import com.cyb.authority.service.RolePermissionService;
 import com.cyb.authority.service.RoleService;
 import com.cyb.authority.service.UserService;
 import com.cyb.authority.validate.UserValidate;
@@ -15,9 +19,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author 陈迎博
@@ -34,6 +41,12 @@ public class AuthenticationAspect {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private PermissionService permissionService;
+
+    @Resource
+    private RolePermissionService rolePermissionService;
 
     @Resource
     private UserService userService;
@@ -63,8 +76,8 @@ public class AuthenticationAspect {
             }
         }
 
-        //用户角色校验
-        boolean isPassRole = validRole(authentication.roleNames(), userId);
+        //用户角色、权限校验
+        boolean isPassRole = validRoleAndPermission(authentication, userId);
 
         //返回校验结果
         if (isPassRole) {
@@ -79,26 +92,58 @@ public class AuthenticationAspect {
 
     /**
      * @Author 陈迎博
-     * @Description 用户角色校验
+     * @Description 用户角色、权限校验
      * @Date 2021/1/30
      */
-    private boolean validRole(String[] roleNames, String userId){
+    private boolean validRoleAndPermission(Authentication authentication, String userId){
 
         boolean isPass = false;
+        String[] roleNames = authentication.roleNames();
+        String[] permissionNames = authentication.permissionNames();
+
+        //校验角色
         if(null != roleNames && roleNames.length > 0){
 
-            List<String> roleList = new ArrayList<>();
+            List<String> roleIdList = new ArrayList<>();
+            List<String> roleNameList = new ArrayList<>();
             //查询用户角色
             List<Role> roles = roleService.selectListByUserId(userId);
-            for (Role role : roles) {
-                roleList.add(role.getName());
-            }
+            if(!CollectionUtils.isEmpty(roles)){
 
-            //校验角色
-            log.info("authentication user={}, roles={}", userId, roleList);
-            for (String role : roleNames) {
-                if (roleList.contains(role)) {
-                    isPass = true;
+                for (Role role : roles) {
+
+                    roleIdList.add(role.getId());
+                    roleNameList.add(role.getName());
+                }
+
+                //校验角色
+                log.info("authentication user={}, roles={}", userId, roleNameList);
+                for (String role : roleNames) {
+                    if (roleNameList.contains(role)) {
+                        isPass = true;
+                    }
+                }
+
+                //校验权限
+                if(isPass && null != permissionNames && permissionNames.length > 0){
+                    List<RolePermission> rolePermissionList = rolePermissionService.selectListByRoleIds(roleIdList);
+                    if(!CollectionUtils.isEmpty(rolePermissionList)){
+
+                        List<String> permissionIdList = new ArrayList<String>(rolePermissionList.size());
+                        for(RolePermission rp : rolePermissionList){
+                            permissionIdList.add(rp.getPermissionId());
+                        }
+
+                        List<Permission> permissionList = permissionService.queryListByIds(permissionIdList);
+                        Set<String> permissionNameSet = permissionList.stream().map(Permission::getName).collect(Collectors.toSet());
+
+                        log.info("authentication user={}, roles={}", userId, permissionNameSet);
+                        for(String permission : permissionNames){
+                            if(permissionNameSet.contains(permission)){
+                                isPass = true;
+                            }
+                        }
+                    }
                 }
             }
         }
