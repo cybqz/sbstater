@@ -21,7 +21,7 @@ public class BaseController {
 
     protected boolean isLogined = false;
 
-    protected Tips tips = null;
+    protected Tips tips = new Tips("", false, false);
 
     /**
      * 验证用户是否登陆
