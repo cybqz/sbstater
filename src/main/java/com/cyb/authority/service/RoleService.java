@@ -1,7 +1,6 @@
 package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,8 +31,15 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     @Resource
     private UserRoleService userRoleService;
 
+    @Resource
+    private RolePermissionService rolePermissionService;
+
     public int deleteById(String id) {
-        return roleMapper.deleteById(id);
+        int count = roleMapper.deleteById(id);
+        if(count > 0){
+            rolePermissionService.deleteByRoleId(id);
+        }
+        return count;
     }
 
     public int insert(Role record) {
@@ -48,12 +54,12 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         if(StringUtils.isBlank(name)){
             return null;
         }else {
-            return roleMapper.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, name));
+            return roleMapper.selectOne(new LambdaQueryWrapper<Role>().eq(Role::getName, name));
         }
     }
 
     public int selectCount(Role role){
-        return roleMapper.selectCount(new QueryWrapper<Role>().lambda()
+        return roleMapper.selectCount(new LambdaQueryWrapper<Role>()
                 .eq(StringUtils.isNotBlank(role.getName()), Role::getName, role.getName())
         );
     }
@@ -74,7 +80,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
                 for(UserRole ur : userRoleList){
                     roleIds.add(ur.getRoleId());
                 }
-                return roleMapper.selectCount(new QueryWrapper<Role>().lambda().notIn(Role::getId, roleIds));
+                return roleMapper.selectCount(new LambdaQueryWrapper<Role>().notIn(Role::getId, roleIds));
             }else{
                 return roleMapper.selectCount(null);
             }
@@ -188,7 +194,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
     public List<Role> selectListByIds(List<String> idList){
-        List<Role> roleList = roleMapper.selectList(new QueryWrapper<Role>().lambda().in(Role::getId, idList));
+        List<Role> roleList = roleMapper.selectList(new LambdaQueryWrapper<Role>().in(Role::getId, idList));
         return roleList;
     }
 }

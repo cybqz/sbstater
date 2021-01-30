@@ -1,10 +1,9 @@
 package com.cyb.authority.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.RolePermissionMapper;
 import com.cyb.authority.domain.RolePermission;
-import com.cyb.authority.domain.UserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,14 @@ public class RolePermissionService extends ServiceImpl<RolePermissionMapper, Rol
 		return rolePermissionMapper.deleteById(id);
 	}
 
+	public int deleteByRoleId(String roleId) {
+
+    	if(StringUtils.isNotBlank(roleId)){
+    		return rolePermissionMapper.delete(new LambdaQueryWrapper<RolePermission>().eq(RolePermission::getRoleId, roleId));
+		}
+		return 0;
+	}
+
 	public int insert(RolePermission record) {
 		return rolePermissionMapper.insert(record);
 	}
@@ -36,31 +43,31 @@ public class RolePermissionService extends ServiceImpl<RolePermissionMapper, Rol
 	}
 
 	public List<RolePermission> selectListByRoleIds(List<String> roleIds) {
-		return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda().in(RolePermission::getRoleId, roleIds));
+		return rolePermissionMapper.selectList(new LambdaQueryWrapper<RolePermission>().in(RolePermission::getRoleId, roleIds));
 	}
 
 	public int selectCount(RolePermission rolePermission){
-		return rolePermissionMapper.selectCount(new QueryWrapper<RolePermission>().lambda()
+		return rolePermissionMapper.selectCount(new LambdaQueryWrapper<RolePermission>()
 				.eq(StringUtils.isNotBlank(rolePermission.getRoleId()), RolePermission::getRoleId, rolePermission.getRoleId())
 				.eq(StringUtils.isNotBlank(rolePermission.getPermissionId()), RolePermission::getPermissionId, rolePermission.getPermissionId())
 		);
 	}
 
 	public RolePermission selectOne(RolePermission rolePermission){
-		return rolePermissionMapper.selectOne(new QueryWrapper<RolePermission>().lambda()
+		return rolePermissionMapper.selectOne(new LambdaQueryWrapper<RolePermission>()
 				.eq(StringUtils.isNotBlank(rolePermission.getRoleId()), RolePermission::getRoleId, rolePermission.getRoleId())
 				.eq(StringUtils.isNotBlank(rolePermission.getPermissionId()), RolePermission::getPermissionId, rolePermission.getPermissionId())
 		);
 	}
 
 	public List<RolePermission> selectByPermissionId(String permissionId) {
-    	return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda()
+    	return rolePermissionMapper.selectList(new LambdaQueryWrapper<RolePermission>()
 				.eq(RolePermission::getPermissionId, permissionId)
 		);
 	}
 
 	public List<RolePermission> selectByRoleId(String roleId) {
-    	return rolePermissionMapper.selectList(new QueryWrapper<RolePermission>().lambda()
+    	return rolePermissionMapper.selectList(new LambdaQueryWrapper<RolePermission>()
 				.eq(RolePermission::getRoleId, roleId)
 		);
 	}

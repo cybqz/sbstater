@@ -1,15 +1,12 @@
 package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.PermissionMapper;
 import com.cyb.authority.domain.Permission;
-import com.cyb.authority.domain.Role;
 import com.cyb.authority.domain.RolePermission;
-import com.cyb.authority.domain.UserRole;
 import com.cyb.common.pagination.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,12 +47,12 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
     	if(StringUtils.isBlank(name)){
     		return null;
 		}else {
-    		return permissionMapper.selectOne(new QueryWrapper<Permission>().lambda().eq(Permission::getName, name));
+    		return permissionMapper.selectOne(new LambdaQueryWrapper<Permission>().eq(Permission::getName, name));
 		}
 	}
 
 	public int selectCount(Permission permission){
-    	return permissionMapper.selectCount(new QueryWrapper<Permission>().lambda()
+    	return permissionMapper.selectCount(new LambdaQueryWrapper<Permission>()
 				.eq(StringUtils.isNotBlank(permission.getName()), Permission::getName, permission.getName())
 		);
 	}
@@ -97,7 +94,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 				for(RolePermission rp : rolePermissionList){
 					permissionIds.add(rp.getPermissionId());
 				}
-				return permissionMapper.selectCount(new QueryWrapper<Permission>().lambda().notIn(Permission::getId, permissionIds));
+				return permissionMapper.selectCount(new LambdaQueryWrapper<Permission>().notIn(Permission::getId, permissionIds));
 			}else{
 				return permissionMapper.selectCount(null);
 			}
@@ -172,6 +169,6 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 
 	public List<Permission> queryListByIds(List<String> idList) {
 
-    	return permissionMapper.selectList(new QueryWrapper<Permission>().lambda().in(Permission::getId, idList));
+    	return permissionMapper.selectList(new LambdaQueryWrapper<Permission>().in(Permission::getId, idList));
 	}
 }

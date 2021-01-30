@@ -1,7 +1,6 @@
 package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,8 +31,15 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	@Resource
 	private LoginService loginService;
 
+	@Resource
+	private UserRoleService userRoleService;
+
 	public int deleteById(String id) {
-		return userMapper.deleteById(id);
+		int count = userMapper.deleteById(id);
+		if(count > 0){
+			userRoleService.deleteByUserId(id);
+		}
+		return count;
 	}
 
 	public int insert(User record, String basePath) {
@@ -42,7 +48,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 		SexEnum sex = record.getSex();
 		String image = basePath + "/headportrait/";
 		if(null == sex || sex.compareTo(SexEnum.WOMAN) == 0) {
-			image += "gril.png";
+			image += "girl.png";
 		}else {
 			image += "boy.png";
 		}
@@ -95,7 +101,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	 * @Date 2021/1/22
 	 */
 	public User selectByUserName(String userName) {
-		return userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getUserName, userName));
+		return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
 	}
 
 	/**
@@ -127,7 +133,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	 */
 	public int selectCount(User user){
 
-		return userMapper.selectCount(new QueryWrapper<User>().lambda()
+		return userMapper.selectCount(new LambdaQueryWrapper<User>()
 				.like(StringUtils.isNotBlank(user.getName()), User::getName, user.getName())
 				.like(StringUtils.isNotBlank(user.getEmail()), User::getEmail, user.getEmail())
 				.like(StringUtils.isNotBlank(user.getPhone()), User::getPhone, user.getPhone())

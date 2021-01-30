@@ -1,7 +1,6 @@
 package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,6 +29,19 @@ public class UserRoleService extends ServiceImpl<UserRoleMapper, UserRole> {
 		return userRoleMapper.deleteById(id);
 	}
 
+	/**
+	 * @Author 陈迎博
+	 * @Description 根据用户编号删除
+	 * @Date 2021/1/30
+	 */
+	public int deleteByUserId(String userId) {
+
+		if(StringUtils.isNotBlank(userId)){
+			return userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getId, userId));
+		}
+		return 0;
+	}
+
 	public int insert(UserRole record) {
 		return userRoleMapper.insert(record);
 	}
@@ -39,14 +51,14 @@ public class UserRoleService extends ServiceImpl<UserRoleMapper, UserRole> {
 	}
 
 	public int selectCount(UserRole userRole){
-		return userRoleMapper.selectCount(new QueryWrapper<UserRole>().lambda()
+		return userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
 				.eq(StringUtils.isNotBlank(userRole.getRoleId()), UserRole::getRoleId, userRole.getRoleId())
 				.eq(StringUtils.isNotBlank(userRole.getUserId()), UserRole::getUserId, userRole.getUserId())
 		);
 	}
 
 	public UserRole selectOne(UserRole userRole){
-		return userRoleMapper.selectOne(new QueryWrapper<UserRole>().lambda()
+		return userRoleMapper.selectOne(new LambdaQueryWrapper<UserRole>()
 				.eq(StringUtils.isNotBlank(userRole.getRoleId()), UserRole::getRoleId, userRole.getRoleId())
 				.eq(StringUtils.isNotBlank(userRole.getUserId()), UserRole::getUserId, userRole.getUserId())
 		);
