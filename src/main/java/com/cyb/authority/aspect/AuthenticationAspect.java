@@ -8,7 +8,6 @@ import com.cyb.authority.service.UserService;
 import com.cyb.authority.validate.UserValidate;
 import com.cyb.common.tips.Tips;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.RequestFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,8 +15,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +73,7 @@ public class AuthenticationAspect {
         } else {
             beginTime.set(System.currentTimeMillis());
             log.info("authentication reject, cost time: {}", System.currentTimeMillis() - beginTime.get());
-            return new Tips(authentication.name() + "，权限验证未通过", true, false);
+            return new Tips(authentication.name() + "，权限验证未通过", authentication.isShowTips(), false);
         }
     }
 
