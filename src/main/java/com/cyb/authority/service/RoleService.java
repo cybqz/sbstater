@@ -35,11 +35,8 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     private RolePermissionService rolePermissionService;
 
     public int deleteById(String id) {
-        int count = roleMapper.deleteById(id);
-        if(count > 0){
-            rolePermissionService.deleteByRoleId(id);
-        }
-        return count;
+        rolePermissionService.deleteByRoleId(id);
+        return roleMapper.deleteById(id);
     }
 
     public int insert(Role record) {

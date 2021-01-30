@@ -35,11 +35,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	private UserRoleService userRoleService;
 
 	public int deleteById(String id) {
-		int count = userMapper.deleteById(id);
-		if(count > 0){
-			userRoleService.deleteByUserId(id);
-		}
-		return count;
+		userRoleService.deleteByUserId(id);
+		return userMapper.deleteById(id);
 	}
 
 	public int insert(User record, String basePath) {
