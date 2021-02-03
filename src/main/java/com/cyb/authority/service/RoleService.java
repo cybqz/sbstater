@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author 陈迎博
@@ -73,10 +74,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
             List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
             if(!CollectionUtils.isEmpty(userRoleList)){
 
-                List<String> roleIds = new ArrayList<String>(userRoleList.size());
-                for(UserRole ur : userRoleList){
-                    roleIds.add(ur.getRoleId());
-                }
+                List<String> roleIds = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toList());
                 return roleMapper.selectCount(new LambdaQueryWrapper<Role>().notIn(Role::getId, roleIds));
             }else{
                 return roleMapper.selectCount(null);
@@ -102,10 +100,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
             List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
             if(!CollectionUtils.isEmpty(userRoleList)){
 
-                List<String> roleIds = new ArrayList<String>(userRoleList.size());
-                for(UserRole ur : userRoleList){
-                    roleIds.add(ur.getRoleId());
-                }
+                List<String> roleIds = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toList());
                 queryWrapper.in(Role::getId, roleIds);
             }
             Page page = null;
@@ -134,11 +129,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
             List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
             if(!CollectionUtils.isEmpty(userRoleList)){
 
-                List<String> roleIds = new ArrayList<String>(userRoleList.size());
-                for(UserRole ur : userRoleList){
-                    roleIds.add(ur.getRoleId());
-                }
-
+                List<String> roleIds = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toList());
                 queryWrapper.notIn(Role::getId, roleIds);
             }
             Page page = null;
@@ -177,13 +168,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         List<UserRole> userRoleList = userRoleService.selectByUserId(userId);
         if(!CollectionUtils.isEmpty(userRoleList)){
 
-            List<String> idList = new ArrayList<String>(userRoleList.size());
-            for(UserRole ur : userRoleList){
-                idList.add(ur.getRoleId());
-            }
-
+            List<String> roleIds = userRoleList.stream().map(UserRole::getRoleId).collect(Collectors.toList());
             //查询角色信息并返回结果
-            List<Role> roleList = selectListByIds(idList);
+            List<Role> roleList = selectListByIds(roleIds);
             return roleList;
         }
 

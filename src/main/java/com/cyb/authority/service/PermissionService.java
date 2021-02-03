@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author 陈迎博
@@ -89,11 +90,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 			//查询角色已拥有的权限
 			List<RolePermission> rolePermissionList = rolePermissionService.selectByRoleId(roleId);
 			if(!CollectionUtils.isEmpty(rolePermissionList)){
-
-				List<String> permissionIds = new ArrayList<String>(rolePermissionList.size());
-				for(RolePermission rp : rolePermissionList){
-					permissionIds.add(rp.getPermissionId());
-				}
+				List<String> permissionIds = rolePermissionList.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
 				return permissionMapper.selectCount(new LambdaQueryWrapper<Permission>().notIn(Permission::getId, permissionIds));
 			}else{
 				return permissionMapper.selectCount(null);
@@ -119,10 +116,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 			List<RolePermission> rolePermissionList = rolePermissionService.selectByRoleId(roleId);
 			if(!CollectionUtils.isEmpty(rolePermissionList)){
 
-				List<String> permissionIds = new ArrayList<String>(rolePermissionList.size());
-				for(RolePermission rp : rolePermissionList){
-					permissionIds.add(rp.getPermissionId());
-				}
+				List<String> permissionIds = rolePermissionList.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
 				queryWrapper.in(Permission::getId, permissionIds);
 			}
 			Page page = null;
@@ -151,11 +145,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 			List<RolePermission> rolePermissionList = rolePermissionService.selectByRoleId(roleId);
 			if(!CollectionUtils.isEmpty(rolePermissionList)){
 
-				List<String> permissionIds = new ArrayList<String>(rolePermissionList.size());
-				for(RolePermission rp : rolePermissionList){
-					permissionIds.add(rp.getPermissionId());
-				}
-
+				List<String> permissionIds = rolePermissionList.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
 				queryWrapper.notIn(Permission::getId, permissionIds);
 			}
 			Page page = null;
@@ -168,7 +158,6 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 	}
 
 	public List<Permission> queryListByIds(List<String> idList) {
-
     	return permissionMapper.selectList(new LambdaQueryWrapper<Permission>().in(Permission::getId, idList));
 	}
 }
