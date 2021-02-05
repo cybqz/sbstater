@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +37,9 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
     }
 
     public int insert(SysModel record) {
+        LocalDateTime now = LocalDateTime.now();
+        record.setCreateDateTime(now);
+        record.setUpdateDateTime(now);
         return sysModelMapper.insert(record);
     }
 
