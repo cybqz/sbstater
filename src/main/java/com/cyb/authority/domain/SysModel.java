@@ -29,6 +29,9 @@ public class SysModel {
     @TableField(value = "title")
     private String title;
 
+    @TableField(value = "navbar")
+    private String navbar;
+
     @TableField(value = "url")
     private String url;
 

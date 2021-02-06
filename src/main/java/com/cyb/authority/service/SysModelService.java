@@ -70,6 +70,14 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
         );
     }
 
+    public int selectParentCount(SysModel sysModel){
+        return sysModelMapper.selectCount(new LambdaQueryWrapper<SysModel>()
+                .eq(StringUtils.isNotBlank(sysModel.getUrl()), SysModel::getUrl, sysModel.getUrl())
+                .eq(StringUtils.isNotBlank(sysModel.getTitle()), SysModel::getTitle, sysModel.getTitle())
+                .and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""))
+        );
+    }
+
     /**
      * @Author 陈迎博
      * @Title 查询用户未拥有系统模块总数
@@ -158,12 +166,36 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
     public IPage<SysModel> selectPage(SysModel record, Pagination pagination) {
 
         LambdaQueryWrapper<SysModel> queryWrapper = queryWrapper = new LambdaQueryWrapper<SysModel>();
-        queryWrapper.orderByDesc(SysModel::getCreateDateTime);
+        queryWrapper.orderByAsc(SysModel::getSort).orderByDesc(SysModel::getCreateDateTime);
         if(null != record){
             queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getUrl()), SysModel::getUrl, record.getUrl());
             queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getTitle()), SysModel::getTitle, record.getTitle());
+            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getNavbar()), SysModel::getNavbar, record.getNavbar());
         }
 
+        Page page = null;
+        if(null != pagination){
+            page = new Page(pagination.getPageIndex(), pagination.getLimit());
+        }
+        return sysModelMapper.selectPage(page, queryWrapper);
+    }
+
+    /**
+     * @Author 陈迎博
+     * @Title 分页查询
+     * @Description 分页查询
+     * @Date 2021/1/16
+     */
+    public IPage<SysModel> selectParentPage(SysModel record, Pagination pagination) {
+
+        LambdaQueryWrapper<SysModel> queryWrapper = queryWrapper = new LambdaQueryWrapper<SysModel>()
+                .orderByAsc(SysModel::getSort)
+                .orderByDesc(SysModel::getCreateDateTime);
+        if(null != record){
+            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getTitle()), SysModel::getTitle, record.getTitle())
+                    .like(StringUtils.isNotBlank(record.getNavbar()), SysModel::getNavbar, record.getNavbar());
+        }
+        queryWrapper = queryWrapper.and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""));
         Page page = null;
         if(null != pagination){
             page = new Page(pagination.getPageIndex(), pagination.getLimit());
