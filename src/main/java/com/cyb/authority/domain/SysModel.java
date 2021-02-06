@@ -26,9 +26,6 @@ public class SysModel {
     @TableField(value = "parent_id")
     private String parentId;
 
-    @TableField(value = "name")
-    private String name;
-
     @TableField(value = "title")
     private String title;
 
@@ -36,7 +33,7 @@ public class SysModel {
     private String url;
 
     @TableField(value = "sort")
-    private int sort;
+    private Integer sort;
 
     @TableField(value = "remarks")
     private String remarks;

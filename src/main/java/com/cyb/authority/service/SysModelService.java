@@ -47,17 +47,26 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
         return sysModelMapper.selectById(id);
     }
 
-    public SysModel selectByName(String name){
-        if(StringUtils.isBlank(name)){
+    public SysModel selectByUrl(String url){
+        if(StringUtils.isBlank(url)){
             return null;
         }else {
-            return sysModelMapper.selectOne(new LambdaQueryWrapper<SysModel>().eq(SysModel::getName, name));
+            return sysModelMapper.selectOne(new LambdaQueryWrapper<SysModel>().eq(SysModel::getUrl, url));
+        }
+    }
+
+    public SysModel selectByTitle(String title){
+        if(StringUtils.isBlank(title)){
+            return null;
+        }else {
+            return sysModelMapper.selectOne(new LambdaQueryWrapper<SysModel>().eq(SysModel::getTitle, title));
         }
     }
 
     public int selectCount(SysModel sysModel){
         return sysModelMapper.selectCount(new LambdaQueryWrapper<SysModel>()
-                .eq(StringUtils.isNotBlank(sysModel.getName()), SysModel::getName, sysModel.getName())
+                .eq(StringUtils.isNotBlank(sysModel.getUrl()), SysModel::getUrl, sysModel.getUrl())
+                .eq(StringUtils.isNotBlank(sysModel.getTitle()), SysModel::getTitle, sysModel.getTitle())
         );
     }
 
@@ -151,7 +160,8 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
         LambdaQueryWrapper<SysModel> queryWrapper = queryWrapper = new LambdaQueryWrapper<SysModel>();
         queryWrapper.orderByDesc(SysModel::getCreateDateTime);
         if(null != record){
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getName()), SysModel::getName, record.getName());
+            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getUrl()), SysModel::getUrl, record.getUrl());
+            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getTitle()), SysModel::getTitle, record.getTitle());
         }
 
         Page page = null;
