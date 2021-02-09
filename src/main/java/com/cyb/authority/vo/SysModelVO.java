@@ -1,10 +1,8 @@
 package com.cyb.authority.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.cyb.authority.domain.SysModel;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
 /**
