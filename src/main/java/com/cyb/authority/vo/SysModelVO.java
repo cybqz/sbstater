@@ -22,5 +22,7 @@ public class SysModelVO {
 
     private String url;
 
+    private String iconClass;
+
     private List<SysModel> children;
 }

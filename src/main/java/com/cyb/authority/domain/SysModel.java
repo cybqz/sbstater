@@ -32,6 +32,9 @@ public class SysModel {
     @TableField(value = "navbar")
     private String navbar;
 
+    @TableField(value = "icon_class")
+    private String iconClass;
+
     @TableField(value = "url")
     private String url;
 
