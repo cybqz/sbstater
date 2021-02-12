@@ -160,10 +160,13 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
 
                     resultList = new ArrayList<SysModelVO>();
                     List<SysModel> parentList = new ArrayList<SysModel>();
-                    //添加父栏目
+
+                    //遍历系统模块列表，组装返回结果
                     Map<String, List<SysModel>> tempMap = new HashMap<String, List<SysModel>>();
                     for(SysModel sysModel : sysModelList){
-                        if(StringUtils.isBlank(sysModel.getParentId())){
+
+                        String key = sysModel.getParentId();
+                        if(StringUtils.isBlank(key)){
                             if(!tempMap.containsKey(sysModel.getId())){
                                 parentList.add(sysModel);
                                 tempMap.put(sysModel.getId(), new ArrayList<SysModel>());

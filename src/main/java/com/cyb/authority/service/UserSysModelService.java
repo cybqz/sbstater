@@ -50,17 +50,23 @@ public class UserSysModelService extends ServiceImpl<UserSysModelMapper, UserSys
 	}
 
 	public int selectCount(UserSysModel sysModel){
-		return userSysModelMapper.selectCount(new LambdaQueryWrapper<UserSysModel>()
-				.eq(StringUtils.isNotBlank(sysModel.getSysModelId()), UserSysModel::getSysModelId, sysModel.getSysModelId())
-				.eq(StringUtils.isNotBlank(sysModel.getUserId()), UserSysModel::getUserId, sysModel.getUserId())
-		);
+		if(null != sysModel && (StringUtils.isNotBlank(sysModel.getSysModelId()) ||StringUtils.isNotBlank(sysModel.getUserId()))){
+			return userSysModelMapper.selectCount(new LambdaQueryWrapper<UserSysModel>()
+					.eq(StringUtils.isNotBlank(sysModel.getSysModelId()), UserSysModel::getSysModelId, sysModel.getSysModelId())
+					.eq(StringUtils.isNotBlank(sysModel.getUserId()), UserSysModel::getUserId, sysModel.getUserId())
+			);
+		}
+		return 0;
 	}
 
 	public UserSysModel selectOne(UserSysModel sysModel){
-		return userSysModelMapper.selectOne(new LambdaQueryWrapper<UserSysModel>()
-				.eq(StringUtils.isNotBlank(sysModel.getSysModelId()), UserSysModel::getSysModelId, sysModel.getSysModelId())
-				.eq(StringUtils.isNotBlank(sysModel.getUserId()), UserSysModel::getUserId, sysModel.getUserId())
-		);
+		if(null != sysModel && (StringUtils.isNotBlank(sysModel.getSysModelId()) ||StringUtils.isNotBlank(sysModel.getUserId()))){
+			return userSysModelMapper.selectOne(new LambdaQueryWrapper<UserSysModel>()
+					.eq(StringUtils.isNotBlank(sysModel.getSysModelId()), UserSysModel::getSysModelId, sysModel.getSysModelId())
+					.eq(StringUtils.isNotBlank(sysModel.getUserId()), UserSysModel::getUserId, sysModel.getUserId())
+			);
+		}
+		return null;
 	}
 
 	/**
