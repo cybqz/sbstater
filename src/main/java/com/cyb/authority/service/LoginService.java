@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.cyb.authority.domain.Role;
 import com.cyb.authority.domain.User;
 import com.cyb.authority.domain.UserRole;
+import com.cyb.authority.domain.UserSysModel;
 import com.cyb.authority.utils.EncryptionDecrypt;
+import com.cyb.authority.vo.SysModelVO;
 import com.cyb.common.tips.Tips;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -13,6 +15,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
@@ -34,16 +37,33 @@ public class LoginService {
 	@Resource
 	private UserRoleService userRoleService;
 
+	@Resource
+	private SysModelService sysModelService;
+
+	@Resource
+	private UserSysModelService userSysModelService;
+
 	public Tips login(User user) {
 		Tips tips = new Tips("登陆失败", true, false);
 		validateParam(user, tips);
 		if(tips.isValidate()){
 			tips.setValidate(false);
-			JSONObject result = commonLogin(user);
-			if(null != result && result.containsKey("authToken")){
-				tips = new Tips("登录成功！", true, result);
-			}else{
-				tips = new Tips(result.getString("msg"), true, false);
+
+			User userTemp = userServices.selectByUserName(user.getUserName());
+			if(null != userTemp){
+
+				boolean havSysModel = userSysModelValid(userTemp.getId());
+				if(havSysModel){
+
+					JSONObject result = commonLogin(user);
+					if(null != result && result.containsKey("authToken")){
+						tips = new Tips("登录成功！", true, result);
+					}else{
+						tips = new Tips(result.getString("msg"), true, false);
+					}
+				}else {
+					tips.setMsg("当前用户需要设置系统模块");
+				}
 			}
 		}
 		return tips;
@@ -57,21 +77,28 @@ public class LoginService {
 			tips.setValidate(false);
 			User userTemp = userServices.selectByUserName(user.getUserName());
 			if(null != userTemp){
-				List<UserRole> userRoleList = userRoleService.selectByUserId(userTemp.getId());
-				if(null != userRoleList && !userRoleList.isEmpty()){
-					for(UserRole userRole : userRoleList){
+				boolean havSysModel = userSysModelValid(userTemp.getId());
+				if(havSysModel){
 
-						Role role = roleService.selectById(userRole.getRoleId());
-						if(null != role && role.getName().equals(roleName)){
+					List<UserRole> userRoleList = userRoleService.selectByUserId(userTemp.getId());
+					if(null != userRoleList && !userRoleList.isEmpty()){
 
-							JSONObject result = commonLogin(user);
-							if(null != result && result.containsKey("authToken")){
-								tips = new Tips("登录成功！", true, result);
-							}else{
-								tips.setData(result);
+						for(UserRole userRole : userRoleList){
+
+							Role role = roleService.selectById(userRole.getRoleId());
+							if(null != role && role.getName().equals(roleName)){
+
+								JSONObject result = commonLogin(user);
+								if(null != result && result.containsKey("authToken")){
+									tips = new Tips("登录成功！", true, result);
+								}else{
+									tips.setData(result);
+								}
 							}
 						}
 					}
+				}else {
+					tips.setMsg("当前用户需要设置系统模块");
 				}
 			}
 		}
@@ -108,6 +135,26 @@ public class LoginService {
 		return tips;
 	}
 
+	/**
+	 * @Author 陈迎博
+	 * @Title 用户系统模块校验
+	 * @Description 用户系统模块校验
+	 * @Date 2021/2/12
+	 */
+	private boolean userSysModelValid(String userId){
+
+		UserSysModel userSysModel = new UserSysModel();
+		userSysModel.setUserId(userId);
+		int count = userSysModelService.selectCount(userSysModel);
+		if(count > 0){
+			List<SysModelVO> list = sysModelService.selectListHav(userId);
+			if(!CollectionUtils.isEmpty(list)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private JSONObject commonLogin(User user){
 		JSONObject loginResult = doLogin(user.getUserName(), user.getPassword());
 		if(null != loginResult && loginResult.containsKey("authToken")){
@@ -121,6 +168,12 @@ public class LoginService {
 		return loginResult;
 	}
 
+	/**
+	 * @Author 陈迎博
+	 * @Title 登录参数校验
+	 * @Description 登录参数校验
+	 * @Date 2021/2/12
+	 */
 	private void validateParam(User user, Tips tips){
 
 		if(StringUtils.isEmpty(user.getUserName())){
