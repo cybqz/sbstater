@@ -1,4 +1,4 @@
-package com.cyb.common.validation;
+package com.cyb.common.validation.group;
 
 /**
  * @Author 陈迎博
