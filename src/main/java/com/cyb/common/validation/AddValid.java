@@ -5,5 +5,5 @@ package com.cyb.common.validation;
  * @Description 新增校验分组
  * @Date 2021/2/13
  */
-public class AddValid {
+public interface AddValid {
 }
