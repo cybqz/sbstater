@@ -4,9 +4,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.cyb.authority.constant.SexEnum;
+import com.cyb.common.validation.constraints.Phone;
+import com.cyb.common.validation.group.AddValid;
+import com.cyb.common.validation.group.UpdateValid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -22,27 +28,35 @@ import java.time.LocalDateTime;
 public class User implements Serializable {
 
     @TableId(value = "id")
+    @NotBlank(message = "ID不能为空", groups = {UpdateValid.class})
     private String id;
 
     @TableField(value = "name")
+    @NotBlank(message = "姓名不能为空", groups = {AddValid.class, UpdateValid.class})
     private String name;
 
     @TableField(value = "user_name")
+    @NotBlank(message = "用户名不能为空", groups = {AddValid.class, UpdateValid.class})
     private String userName;
 
     @TableField(value = "password")
+    @NotBlank(message = "密码不能为空", groups = {AddValid.class, UpdateValid.class})
     private String password;
 
     @TableField(value = "phone")
+    @Phone(groups = {AddValid.class, UpdateValid.class})
     private String phone;
 
     @TableField(value = "email")
+    @Email(message = "邮箱地址不合法", groups = {AddValid.class, UpdateValid.class})
     private String email;
 
     @TableField(value = "sex")
+    @NotNull(message = "性别校验不合法")
     private SexEnum sex;
 
     @TableField(value = "address")
+    @NotBlank(message = "地址不能为空", groups = {AddValid.class, UpdateValid.class})
     private String address;
 
     @TableField(value = "image")
