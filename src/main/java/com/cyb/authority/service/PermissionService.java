@@ -2,18 +2,21 @@ package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.PermissionMapper;
 import com.cyb.authority.domain.Permission;
 import com.cyb.authority.domain.RolePermission;
+import com.cyb.authority.vo.PermissionSearchVO;
 import com.cyb.common.pagination.Pagination;
+import com.cyb.common.utils.WrapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ import java.util.stream.Collectors;
 public class PermissionService extends ServiceImpl<PermissionMapper, Permission> {
 
 	@Resource
+	private WrapperUtil wrapperUtil;
+
+	@Resource
 	private PermissionMapper permissionMapper;
 
 	@Resource
@@ -37,6 +43,7 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 	}
 
 	public int insert(Permission record) {
+		record.setCreateDateTime(LocalDateTime.now());
 		return permissionMapper.insert(record);
 	}
 
@@ -52,10 +59,8 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 		}
 	}
 
-	public int selectCount(Permission permission){
-    	return permissionMapper.selectCount(new LambdaQueryWrapper<Permission>()
-				.eq(StringUtils.isNotBlank(permission.getName()), Permission::getName, permission.getName())
-		);
+	public int selectCount(PermissionSearchVO permission){
+    	return permissionMapper.selectCount(commonGetQueryWrapper(permission));
 	}
 
 	/**
@@ -64,14 +69,9 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 	 * @Description 分页查询
 	 * @Date 2021/1/16
 	 */
-	public IPage<Permission> selectPage(Permission record, Pagination pagination) {
+	public IPage<Permission> selectPage(PermissionSearchVO record, Pagination pagination) {
 
-		LambdaQueryWrapper<Permission> queryWrapper = queryWrapper = new LambdaQueryWrapper<Permission>();
-		queryWrapper.orderByDesc(Permission::getCreateDateTime);
-		if(null != record){
-			queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getName()), Permission::getName, record.getName());
-		}
-
+		LambdaQueryWrapper<Permission> queryWrapper = commonGetQueryWrapper(record);
 		Page page = null;
 		if(null != pagination){
 			page = new Page(pagination.getPageIndex(), pagination.getLimit());
@@ -159,5 +159,19 @@ public class PermissionService extends ServiceImpl<PermissionMapper, Permission>
 
 	public List<Permission> queryListByIds(List<String> idList) {
     	return permissionMapper.selectList(new LambdaQueryWrapper<Permission>().in(Permission::getId, idList));
+	}
+
+	private LambdaQueryWrapper commonGetQueryWrapper(PermissionSearchVO permission){
+
+		LambdaQueryWrapper<Permission> queryWrapper = new LambdaQueryWrapper<Permission>()
+				.orderByDesc(Permission::getCreateDateTime);
+		if(null != permission){
+			queryWrapper.like(StringUtils.isNotBlank(permission.getName()), Permission::getName, permission.getName())
+						.like(StringUtils.isNotBlank(permission.getRemarks()), Permission::getRemarks, permission.getRemarks());
+			SFunction<Permission, LocalDateTime> function = Permission::getCreateDateTime;
+			wrapperUtil.appendDateTime(queryWrapper, function, permission.getDateTime());
+		}
+
+		return queryWrapper;
 	}
 }

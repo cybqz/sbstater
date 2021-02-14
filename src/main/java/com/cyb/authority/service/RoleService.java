@@ -2,18 +2,23 @@ package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.RoleMapper;
+import com.cyb.authority.domain.Permission;
 import com.cyb.authority.domain.Role;
 import com.cyb.authority.domain.UserRole;
+import com.cyb.authority.vo.PermissionSearchVO;
+import com.cyb.authority.vo.RoleSearchVO;
 import com.cyb.common.pagination.Pagination;
+import com.cyb.common.utils.WrapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +35,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     private RoleMapper roleMapper;
 
     @Resource
+    private WrapperUtil wrapperUtil;
+
+    @Resource
     private UserRoleService userRoleService;
 
     @Resource
@@ -41,6 +49,7 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     }
 
     public int insert(Role record) {
+        record.setCreateDateTime(LocalDateTime.now());
         return roleMapper.insert(record);
     }
 
@@ -56,10 +65,8 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         }
     }
 
-    public int selectCount(Role role){
-        return roleMapper.selectCount(new LambdaQueryWrapper<Role>()
-                .eq(StringUtils.isNotBlank(role.getName()), Role::getName, role.getName())
-        );
+    public int selectCount(RoleSearchVO role){
+        return roleMapper.selectCount(commonGetQueryWrapper(role));
     }
 
     /**
@@ -147,14 +154,9 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
      * @Description 分页查询
      * @Date 2021/1/16
      */
-    public IPage<Role> selectPage(Role record, Pagination pagination) {
+    public IPage<Role> selectPage(RoleSearchVO record, Pagination pagination) {
 
-        LambdaQueryWrapper<Role> queryWrapper = queryWrapper = new LambdaQueryWrapper<Role>();
-        queryWrapper.orderByDesc(Role::getCreateDateTime);
-        if(null != record){
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getName()), Role::getName, record.getName());
-        }
-
+        LambdaQueryWrapper<Role> queryWrapper = commonGetQueryWrapper(record);
         Page page = null;
         if(null != pagination){
             page = new Page(pagination.getPageIndex(), pagination.getLimit());
@@ -180,5 +182,19 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
     public List<Role> selectListByIds(List<String> idList){
         List<Role> roleList = roleMapper.selectList(new LambdaQueryWrapper<Role>().in(Role::getId, idList));
         return roleList;
+    }
+
+    private LambdaQueryWrapper commonGetQueryWrapper(RoleSearchVO role){
+
+        LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<Role>()
+                .orderByDesc(Role::getCreateDateTime);
+        if(null != role){
+            queryWrapper.like(StringUtils.isNotBlank(role.getName()), Role::getName, role.getName())
+                    .like(StringUtils.isNotBlank(role.getRemarks()), Role::getRemarks, role.getRemarks());
+            SFunction<Role, LocalDateTime> function = Role::getCreateDateTime;
+            wrapperUtil.appendDateTime(queryWrapper, function, role.getDateTime());
+        }
+
+        return queryWrapper;
     }
 }

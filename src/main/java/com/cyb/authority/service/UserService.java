@@ -2,14 +2,18 @@ package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.constant.SexEnum;
 import com.cyb.authority.dao.UserMapper;
 import com.cyb.authority.domain.User;
 import com.cyb.authority.utils.EncryptionDecrypt;
+import com.cyb.authority.vo.UserSearchVO;
 import com.cyb.common.pagination.Pagination;
 import com.cyb.common.tips.Tips;
+import com.cyb.common.utils.DateTimeUtil;
+import com.cyb.common.utils.WrapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	
 	@Resource
 	private UserMapper userMapper;
+
+	@Resource
+	private WrapperUtil wrapperUtil;
 
 	@Resource
 	private LoginService loginService;
@@ -56,6 +63,16 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
 	public User selectById(String id) {
 		return userMapper.selectById(id);
+	}
+
+	/**
+	 * @Author 陈迎博
+	 * @Title 根据用户姓名查询用户信息
+	 * @Description
+	 * @Date 2021/1/22
+	 */
+	public User selectByUserName(String userName) {
+		return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
 	}
 
 	public Tips updatePasswordById(String userId, String password, String oldPassword, boolean againLogin){
@@ -93,28 +110,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
 	/**
 	 * @Author 陈迎博
-	 * @Title 根据用户姓名查询用户信息
-	 * @Description
-	 * @Date 2021/1/22
-	 */
-	public User selectByUserName(String userName) {
-		return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, userName));
-	}
-
-	/**
-	 * @Author 陈迎博
 	 * @Title 分页查询
 	 * @Description 分页查询
 	 * @Date 2021/1/16
 	 */
-	public IPage<User> selectPage(User record, Pagination pagination) {
+	public IPage<User> selectPage(UserSearchVO record, Pagination pagination) {
 
-		LambdaQueryWrapper<User> queryWrapper = queryWrapper = new LambdaQueryWrapper<User>();
+		LambdaQueryWrapper<User> queryWrapper = queryWrapper = commonGetQueryWrapper(record);
 		queryWrapper.orderByDesc(User::getCreateDateTime);
-		if(null != record){
-			queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getUserName()), User::getUserName, record.getUserName());
-		}
-
 		Page page = null;
 		if(null != pagination){
 			page = new Page(pagination.getPageIndex(), pagination.getLimit());
@@ -128,13 +131,22 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 	 * @Description
 	 * @Date 2021/1/22
 	 */
-	public int selectCount(User user){
+	public int selectCount(UserSearchVO user){
+		return userMapper.selectCount(commonGetQueryWrapper(user));
+	}
 
-		return userMapper.selectCount(new LambdaQueryWrapper<User>()
-				.like(StringUtils.isNotBlank(user.getName()), User::getName, user.getName())
-				.like(StringUtils.isNotBlank(user.getEmail()), User::getEmail, user.getEmail())
-				.like(StringUtils.isNotBlank(user.getPhone()), User::getPhone, user.getPhone())
-				.like(StringUtils.isNotBlank(user.getUserName()), User::getUserName, user.getUserName())
-		);
+	private LambdaQueryWrapper commonGetQueryWrapper(UserSearchVO user){
+
+		LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+		if(null != user){
+			queryWrapper.like(StringUtils.isNotBlank(user.getName()), User::getName, user.getName())
+						.like(StringUtils.isNotBlank(user.getEmail()), User::getEmail, user.getEmail())
+						.like(StringUtils.isNotBlank(user.getPhone()), User::getPhone, user.getPhone())
+						.like(StringUtils.isNotBlank(user.getUserName()), User::getUserName, user.getUserName());
+
+			SFunction<User, LocalDateTime> function = User::getCreateDateTime;
+			wrapperUtil.appendDateTime(queryWrapper, function, user.getDateTime());
+		}
+		return queryWrapper;
 	}
 }

@@ -7,6 +7,7 @@ import com.cyb.authority.constant.SexEnum;
 import com.cyb.common.validation.constraints.Phone;
 import com.cyb.common.validation.group.AddValid;
 import com.cyb.common.validation.group.UpdateValid;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,7 +49,7 @@ public class User implements Serializable {
     private String phone;
 
     @TableField(value = "email")
-    @Email(message = "邮箱地址不合法", groups = {AddValid.class, UpdateValid.class})
+    @Email(message = "邮箱地址不合法", regexp = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", groups = {AddValid.class, UpdateValid.class})
     private String email;
 
     @TableField(value = "sex")
@@ -66,8 +67,10 @@ public class User implements Serializable {
     private String introduce;
 
     @TableField(value = "create_date_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createDateTime;
 
     @TableField(value = "update_date_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updateDateTime;
 }
