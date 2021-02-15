@@ -2,13 +2,16 @@ package com.cyb.authority.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cyb.authority.dao.SysModelMapper;
 import com.cyb.authority.domain.SysModel;
 import com.cyb.authority.domain.UserSysModel;
+import com.cyb.authority.vo.SysModelSearchVO;
 import com.cyb.authority.vo.SysModelVO;
 import com.cyb.common.pagination.Pagination;
+import com.cyb.common.utils.WrapperUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +35,9 @@ import java.util.stream.Collectors;
 public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
 
     @Resource
+    private WrapperUtil wrapperUtil;
+
+    @Resource
     private SysModelMapper sysModelMapper;
 
     @Resource
@@ -44,7 +50,6 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
     public int insert(SysModel record) {
         LocalDateTime now = LocalDateTime.now();
         record.setCreateDateTime(now);
-        record.setUpdateDateTime(now);
         return sysModelMapper.insert(record);
     }
 
@@ -68,19 +73,14 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
         }
     }
 
-    public int selectCount(SysModel sysModel){
-        return sysModelMapper.selectCount(new LambdaQueryWrapper<SysModel>()
-                .eq(StringUtils.isNotBlank(sysModel.getUrl()), SysModel::getUrl, sysModel.getUrl())
-                .eq(StringUtils.isNotBlank(sysModel.getTitle()), SysModel::getTitle, sysModel.getTitle())
-        );
+    public int selectCount(SysModelSearchVO sysModel){
+        return sysModelMapper.selectCount(commonGetQueryWrapper(sysModel));
     }
 
-    public int selectParentCount(SysModel sysModel){
-        return sysModelMapper.selectCount(new LambdaQueryWrapper<SysModel>()
-                .eq(StringUtils.isNotBlank(sysModel.getUrl()), SysModel::getUrl, sysModel.getUrl())
-                .eq(StringUtils.isNotBlank(sysModel.getTitle()), SysModel::getTitle, sysModel.getTitle())
-                .and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""))
-        );
+    public int selectParentCount(SysModelSearchVO sysModel){
+        LambdaQueryWrapper<SysModel> queryWrapper = commonGetQueryWrapper(sysModel);
+        queryWrapper.and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""));
+        return sysModelMapper.selectCount(queryWrapper);
     }
 
     /**
@@ -237,17 +237,9 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
      * @Description 分页查询
      * @Date 2021/1/16
      */
-    public IPage<SysModel> selectPage(SysModel record, Pagination pagination) {
+    public IPage<SysModel> selectPage(SysModelSearchVO record, Pagination pagination) {
 
-        LambdaQueryWrapper<SysModel> queryWrapper = queryWrapper = new LambdaQueryWrapper<SysModel>()
-                .orderByAsc(SysModel::getSort)
-                .orderByDesc(SysModel::getCreateDateTime);
-        if(null != record){
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getUrl()), SysModel::getUrl, record.getUrl());
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getTitle()), SysModel::getTitle, record.getTitle());
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getNavbar()), SysModel::getNavbar, record.getNavbar());
-        }
-
+        LambdaQueryWrapper<SysModel> queryWrapper = commonGetQueryWrapper(record);
         Page page = null;
         if(null != pagination){
             page = new Page(pagination.getPageIndex(), pagination.getLimit());
@@ -261,18 +253,12 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
      * @Description 分页查询
      * @Date 2021/1/16
      */
-    public IPage<SysModel> selectParentPage(SysModel record, Pagination pagination) {
+    public IPage<SysModel> selectParentPage(SysModelSearchVO record, Pagination pagination) {
 
-        LambdaQueryWrapper<SysModel> queryWrapper = queryWrapper = new LambdaQueryWrapper<SysModel>()
-                .orderByAsc(SysModel::getSort)
-                .orderByDesc(SysModel::getCreateDateTime);
-        if(null != record){
-            queryWrapper = queryWrapper.like(StringUtils.isNotBlank(record.getTitle()), SysModel::getTitle, record.getTitle())
-                    .like(StringUtils.isNotBlank(record.getNavbar()), SysModel::getNavbar, record.getNavbar());
-        }
+        LambdaQueryWrapper<SysModel> queryWrapper = commonGetQueryWrapper(record);
 
         //url为空则是父栏目
-        queryWrapper = queryWrapper.and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""));
+        queryWrapper.and(wrapper -> wrapper.isNull(SysModel::getUrl).or().eq(SysModel::getUrl,""));
         Page page = null;
         if(null != pagination){
             page = new Page(pagination.getPageIndex(), pagination.getLimit());
@@ -297,5 +283,21 @@ public class SysModelService extends ServiceImpl<SysModelMapper, SysModel> {
     public List<SysModel> selectListByIds(List<String> idList){
         List<SysModel> sysModelList = sysModelMapper.selectList(new LambdaQueryWrapper<SysModel>().in(SysModel::getId, idList));
         return sysModelList;
+    }
+
+    private LambdaQueryWrapper commonGetQueryWrapper(SysModelSearchVO sysModel){
+
+        LambdaQueryWrapper<SysModel> queryWrapper = new LambdaQueryWrapper<SysModel>()
+                .orderByAsc(SysModel::getSort)
+                .orderByDesc(SysModel::getCreateDateTime);
+        if(null != sysModel){
+            queryWrapper.like(StringUtils.isNotBlank(sysModel.getUrl()), SysModel::getUrl, sysModel.getUrl())
+                    .like(StringUtils.isNotBlank(sysModel.getTitle()), SysModel::getTitle, sysModel.getTitle())
+                    .like(StringUtils.isNotBlank(sysModel.getNavbar()), SysModel::getNavbar, sysModel.getNavbar())
+                    .like(StringUtils.isNotBlank(sysModel.getRemarks()), SysModel::getRemarks, sysModel.getRemarks());
+            SFunction<SysModel, LocalDateTime> function = SysModel::getCreateDateTime;
+            wrapperUtil.appendDateTime(queryWrapper, function, sysModel.getDateTime());
+        }
+        return queryWrapper;
     }
 }

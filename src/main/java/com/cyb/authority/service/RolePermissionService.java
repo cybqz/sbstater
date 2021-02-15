@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class RolePermissionService extends ServiceImpl<RolePermissionMapper, Rol
 	}
 
 	public int insert(RolePermission record) {
+    	record.setCreateDateTime(LocalDateTime.now());
 		return rolePermissionMapper.insert(record);
 	}
 

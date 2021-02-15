@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 /**
  * @Author 陈迎博
- * @Description 角色模型
+ * @Description 系统模块模型
  * @Date 2021/1/21
  */
 @Data
