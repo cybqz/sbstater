@@ -34,8 +34,11 @@
 
         <dom4j.version>1.6.1</dom4j.version>
         <lombok.version>1.18.12</lombok.version>
+        <com.ibeetl.version>2.9.3</com.ibeetl.version>
         <fastjson.version>1.2.62</fastjson.version>
+        <org.freemarker.version>2.3.9</org.freemarker.version>
         <commons.lang3.version>3.9</commons.lang3.version>
+        <org.apache.velocity.version>2.3</org.apache.velocity.version>
     </properties>
 
 </project>
