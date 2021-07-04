@@ -1,9 +1,13 @@
 package com.cyb.common.pagination;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import java.util.List;
 
 /**
  * 分页封装类
+ * @author CYB
  */
 public class Pagination<Entity> {
 
@@ -90,5 +94,12 @@ public class Pagination<Entity> {
 		this.isFirstPage = this.pageIndex == 1;
 		this.isLasePage = this.pageIndex == this.pageCount;
 		this.pageCount = (int) (this.limit == 0 ? 1 : (total + this.limit - 1) / this.limit);
+	}
+
+	public static IPage toIPage(Pagination pagination){
+		if(null == pagination){
+			pagination = new Pagination<>();
+		}
+		return new Page<>(pagination.getPageIndex(), pagination.getLimit());
 	}
 }
