@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 公共返回结果封装
+ * @author CYB
  */
 @Data
 public class R<Entity> {
