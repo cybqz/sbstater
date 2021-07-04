@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.8.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -39,9 +39,11 @@
         <com.ibeetl.version>2.9.3</com.ibeetl.version>
         <commons.lang3.version>3.9</commons.lang3.version>
         <org.freemarker.version>2.3.9</org.freemarker.version>
-        <org.projectlombok.version>0.2.0</org.projectlombok.version>
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
+        <org.projectlombok.version>0.2.0</org.projectlombok.version>
         <org.apache.velocity.version>2.3</org.apache.velocity.version>
+        <org.springframework.cloud.version>2.2.8.RELEASE</org.springframework.cloud.version>
+        <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
         <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
     </properties>
 
