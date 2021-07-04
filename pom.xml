@@ -39,6 +39,8 @@
         <com.ibeetl.version>2.9.3</com.ibeetl.version>
         <commons.lang3.version>3.9</commons.lang3.version>
         <org.freemarker.version>2.3.9</org.freemarker.version>
+        <org.projectlombok.version>0.2.0</org.projectlombok.version>
+        <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <org.apache.velocity.version>2.3</org.apache.velocity.version>
         <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
     </properties>
