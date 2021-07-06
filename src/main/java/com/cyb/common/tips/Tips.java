@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 公共返回结果封装
+ * @author CYB
  */
 @Getter
 public class Tips {
@@ -61,6 +62,14 @@ public class Tips {
 		if(validate){
 			this.code = HttpServletResponse.SC_OK;
 		}
+	}
+
+	public static Tips success(Object data, String msg){
+		return new Tips(msg, true, data);
+	}
+
+	public static Tips fail(Object data, String msg){
+		return new Tips(msg, false, data);
 	}
 
 	public Tips(String msg, Integer code, boolean show, boolean validate) {
