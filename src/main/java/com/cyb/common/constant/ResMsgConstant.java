@@ -13,4 +13,6 @@ public class ResMsgConstant {
 
     public static String ADD_FAIL = "添加失败！";
     public static String ADD_SUCCESS = "添加成功！";
+
+    public static String DATA_UNIQUE_VALID_FAIL = "数据唯一性校验失败，相同数据已存在！";
 }

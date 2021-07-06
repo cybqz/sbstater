@@ -28,10 +28,10 @@ public class BaseDomain {
     @TableField(value = "create_date_time")
     @ApiModelProperty(value = "createDateTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime createDateTime;
+    private LocalDateTime createDateTime = LocalDateTime.now();
 
     @TableField(value = "update_date_time")
     @ApiModelProperty(value = "updateDateTime")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updateDateTime = LocalDateTime.now();
 }
