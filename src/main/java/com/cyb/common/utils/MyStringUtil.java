@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * @author CYB
  */
-public class MyStringUtils {
+public class MyStringUtil {
 	
 	public static String format(String format, Date date) {
 		
@@ -85,5 +85,14 @@ public class MyStringUtils {
 			return object.getString(key);
 		}
 		return null;
+	}
+
+	public static int count(String text,String tag){
+		int count =0, start =0;
+		while((start=text.indexOf(tag,start))>=0){
+			start += tag.length();
+			count ++;
+		}
+		return count;
 	}
 }
