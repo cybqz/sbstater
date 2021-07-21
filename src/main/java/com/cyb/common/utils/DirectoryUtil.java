@@ -3,46 +3,68 @@ package com.cyb.common.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.cyb.common.result.FileTree;
 import com.cyb.common.result.FileTreeIndex;
+import lombok.AllArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * DirectoryUtil
  * @author CYB
  */
+@AllArgsConstructor
 public class DirectoryUtil {
 
     private String rootPath;
+    private boolean printLog;
+    private boolean printCostTime;
+
     private static FileTree FILE_TREE = new FileTree();
     private static Map<String, Integer> PATH_ORDER_MAP = new HashMap<String, Integer>();
-    private static List<FileTreeIndex> FILE_TREE_INDEX_LIST = new ArrayList<FileTreeIndex>();
+    private static Map<FileTreeIndex, FileTree> FILE_TREE_INDEX_MAP = new TreeMap<FileTreeIndex, FileTree>();
 
-    public static void main(String[] args) {
-        DirectoryUtil directoryUtil = new DirectoryUtil();
-        File file = new File("F:\\Tencent");
-        directoryUtil.list(file, new FileTreeIndex(0,0,-1));
-        System.out.println(JSONObject.toJSONString(FILE_TREE));
-    }
     /**
-     * 列出该目录下所有子目录及文件
+     * 递归遍历根目录及其一下所有文件结构，
+     * 生成文件树结构
+     */
+    public void listFileTree(){
+        File file = new File(this.rootPath);
+        long start = System.currentTimeMillis();
+        recursionFileTree(file, new FileTreeIndex(0,0,-1));
+        if(printCostTime){
+            int cost = (int) ((System.currentTimeMillis() - start)/1000);
+            System.out.println(String.format("ListFileTree Cost: %ss", cost));
+        }
+    }
+
+    /**
+     * 打印结果
+     */
+    public void printResult(){
+        FILE_TREE_INDEX_MAP.forEach((k,v)->{
+            String subdirectorySize = v.getSubdirectory()==null?"NULL":String.valueOf(v.getSubdirectory().size());
+            String absPath = v.getAbsPath()==null?"NULL":v.getAbsPath();
+            System.out.println(k.toString() + "\t" + subdirectorySize + "\t" + absPath);
+        });
+    }
+
+    /**
+     * 递归遍历根目录及其一下所有文件结构，生成文件树结构
      * @param currentFile 当前文件或目录File对象
      * @param index 坐标
      */
-    public void list(File currentFile, FileTreeIndex index) {
-        System.out.println(currentFile.getPath() + "\t" + JSONObject.toJSONString(index));
-        if(!isListed(index)){
+    private void recursionFileTree(File currentFile, FileTreeIndex index) {
+        if(printLog){
+            System.out.println(currentFile.getPath() + "\t" + JSONObject.toJSONString(index));
+        }
+        if(!FILE_TREE_INDEX_MAP.containsKey(index)){
 
-            //标记已处理
-            FILE_TREE_INDEX_LIST.add(FileTreeIndex.getNew(index));
             if(index.getParentOrder().equals(-1)){
                 //第一次运行
-                rootPath = currentFile.getPath();
                 PATH_ORDER_MAP.put(rootPath, index.getOrder());
                 FILE_TREE.initWithFile(currentFile, index);
+                FILE_TREE_INDEX_MAP.put(FileTreeIndex.getNew(index), FILE_TREE);
             }else {
                 FileTree parentFileTree = getFileTreeByPath(FILE_TREE, currentFile.getParent(), null);
                 if(null != parentFileTree){
@@ -66,10 +88,10 @@ public class DirectoryUtil {
                         if(PATH_ORDER_MAP.containsKey(parent)){
                             parentOrder = PATH_ORDER_MAP.get(parent);
                         }
-                        Integer order = getLastLoopOrder(layer);
+                        Integer order = getLastLayerOrder(layer);
                         index.update(layer, order, parentOrder);
                         PATH_ORDER_MAP.put(path, index.getOrder());
-                        list(file, index);
+                        recursionFileTree(file, index);
                     }
                 }
             }
@@ -77,27 +99,20 @@ public class DirectoryUtil {
     }
 
     /**
-     * 是否已处理
-     * @param index
+     * 获取当前层最新顺序
+     * @param layer
      * @return
      */
-    private boolean isListed(FileTreeIndex index) {
-        for(FileTreeIndex fti : FILE_TREE_INDEX_LIST){
-            if(fti.equals(index)){
-                return true;
+    private Integer getLastLayerOrder(Integer layer){
+        AtomicReference<Integer> order = new AtomicReference<>(0);
+        PATH_ORDER_MAP.forEach((k,v)->{
+            if(layer.equals(MyStringUtil.count(k.replace(rootPath,""), "\\"))){
+                if(v.compareTo(order.get())>0){
+                    order.set(v);
+                }
             }
-        }
-        return false;
-    }
-
-    private Integer getLastLoopOrder(Integer layer){
-        Integer order = 0;
-        for(FileTreeIndex fti : FILE_TREE_INDEX_LIST){
-            if(fti.getLayer().equals(layer)){
-                order = fti.getOrder();
-            }
-        }
-        return order;
+        });
+        return order.get();
     }
 
     /**
@@ -143,8 +158,10 @@ public class DirectoryUtil {
      */
     private void addElement(File currentFile, FileTree parentFileTree, FileTreeIndex index){
         List<FileTree> subdirectory = (parentFileTree.getSubdirectory()==null?new ArrayList<FileTree>():parentFileTree.getSubdirectory());
-        subdirectory.add(FileTree.getWithFile(currentFile, index));
+        FileTree fileTree = FileTree.getWithFile(currentFile, index);
+        subdirectory.add(fileTree);
         parentFileTree.setSubdirectory(subdirectory);
+        FILE_TREE_INDEX_MAP.put(FileTreeIndex.getNew(index), fileTree);
     }
 
     /**
