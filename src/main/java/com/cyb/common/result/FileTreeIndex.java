@@ -1,5 +1,6 @@
 package com.cyb.common.result;
 
+import com.cyb.common.exception.CompareException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -118,6 +119,7 @@ public class FileTreeIndex implements Comparable{
   @Override
   public int compareTo(Object o) {
     FileTreeIndex fti = (FileTreeIndex) o;
+
     int compareLayer = this.layer.compareTo(fti.getLayer());
     if(compareLayer != 0){
       return compareLayer;
@@ -127,6 +129,17 @@ public class FileTreeIndex implements Comparable{
       return compareOrder;
     }
     int compareParentOrder = this.parentOrder.compareTo(fti.getParentOrder());
-    return compareParentOrder;
+    if(compareParentOrder != 0){
+      return compareParentOrder;
+    }
+
+    String ftiStr = fti.toString();
+    String thisStr = this.toString();
+
+    //是同一个
+    if(ftiStr.equals(thisStr)){
+      return compareParentOrder;
+    }
+    throw new CompareException(String.format("Compare fail: %s, %s", ftiStr, thisStr));
   }
 }
