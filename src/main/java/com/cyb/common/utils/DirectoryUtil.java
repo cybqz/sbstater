@@ -16,9 +16,25 @@ import java.util.concurrent.atomic.AtomicReference;
 @AllArgsConstructor
 public class DirectoryUtil {
 
+    /**
+     * 根路径
+     */
     private String rootPath;
+
+    /**
+     * 是否打印日志
+     */
     private boolean printLog;
+
+    /**
+     * 是否打印耗时
+     */
     private boolean printCostTime;
+
+    /**
+     * 最大递归深度
+     */
+    private int maxRecursionDeep = -1;
 
     private static FileTree FILE_TREE = new FileTree();
     private static Map<String, Integer> PATH_ORDER_MAP = new HashMap<String, Integer>();
@@ -72,6 +88,11 @@ public class DirectoryUtil {
                 }else {
                     return;
                 }
+            }
+
+            //如果当前层级到组大递归深度，直接返回
+            if(maxRecursionDeep > 0 && index.getLayer().compareTo(maxRecursionDeep) >= 0){
+                return;
             }
 
             //遍历子目录并回调处理

@@ -22,7 +22,7 @@ public class FileTreeIndex implements Comparable{
   }
 
   /**
-   * 是否相同
+   * 判断坐标是否相等
    * @param index
    * @return
    */
