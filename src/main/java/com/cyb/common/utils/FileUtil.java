@@ -18,15 +18,12 @@ public class FileUtil {
      */
     public static Tips createPath(String path){
         if(StringUtils.isNotBlank(path)){
-            path = path.replace("\\/","\\");
             File file = new File(path);
             if(!file.isDirectory()){
-                if(!file.exists()){
-                    file.mkdirs();
-                }
-                return Tips.fail(null, "创建目录成功！");
+                file.mkdirs();
+                return Tips.fail(path, "创建目录成功！");
             }
-            return Tips.fail(null, "创建目录失败，路径不是目录！");
+            return Tips.fail(path, "创建目录失败，路径已存在！");
         }
         return Tips.fail(null, "创建目录失败，路径是空！");
     }
