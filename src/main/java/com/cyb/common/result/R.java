@@ -1,5 +1,6 @@
 package com.cyb.common.result;
 
+import com.cyb.common.tips.Tips;
 import lombok.Data;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,6 +50,10 @@ public class R<Entity> {
     public static R fail(String msg, Object data){
         R r = new R(HttpServletResponse.SC_BAD_REQUEST, data, msg);
         return r;
+    }
+
+    public Tips toTips(){
+        return new Tips(this.msg, this.success, this.data);
     }
 
     public boolean isSuccess(){

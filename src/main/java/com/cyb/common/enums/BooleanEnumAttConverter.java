@@ -1,6 +1,7 @@
 package com.cyb.common.enums;
 
 import javax.persistence.AttributeConverter;
+import java.util.Optional;
 
 /**
  *BooleanEnum转换实现类
@@ -10,11 +11,12 @@ public class BooleanEnumAttConverter implements AttributeConverter<BooleanEnum, 
 
     @Override
     public Integer convertToDatabaseColumn(BooleanEnum booleanEnum) {
-        return booleanEnum.getCode();
+        return booleanEnum==null?null:booleanEnum.getCode();
     }
 
     @Override
     public BooleanEnum convertToEntityAttribute(Integer code) {
-        return BooleanEnum.of(code).get();
+        Optional<BooleanEnum> optional = BooleanEnum.of(code);
+        return null==optional?null:optional.get();
     }
 }
