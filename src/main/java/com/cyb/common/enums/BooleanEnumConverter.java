@@ -7,7 +7,7 @@ import java.util.Optional;
  *BooleanEnum转换实现类
  * @author CYB
  */
-public class BooleanEnumAttConverter implements AttributeConverter<BooleanEnum, Integer> {
+public class BooleanEnumConverter implements AttributeConverter<BooleanEnum, Integer> {
 
     @Override
     public Integer convertToDatabaseColumn(BooleanEnum booleanEnum) {
