@@ -1,14 +1,15 @@
 package com.cyb.common.tips;
 
-import com.cyb.common.result.R;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  * 公共返回结果封装
  * @author CYB
  */
-@Getter
+@Data
+@NoArgsConstructor
 public class Tips {
 
 	/**
