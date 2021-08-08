@@ -20,6 +20,7 @@ public class ResMsgConstant {
 
     public static String QUERY_FAIL = "查询失败！";
     public static String QUERY_SUCCESS = "查询成功！";
+    public static String QUERY_FAIL_NO_RESULT = "查询失败，结果不存在！";
 
 
     public static String DATA_UNIQUE_ID_FAIL = "数据唯一ID不存在！";
