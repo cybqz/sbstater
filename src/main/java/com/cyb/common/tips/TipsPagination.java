@@ -37,6 +37,31 @@ public class TipsPagination<E> {
 
 	public TipsPagination() {}
 
+	public static TipsPagination fail (String msg) {
+		TipsPagination tipsPagination = new TipsPagination();
+		tipsPagination.setMsg(msg);
+		tipsPagination.setCode(HttpServletResponse.SC_BAD_REQUEST);
+		return tipsPagination;
+	}
+
+	public static TipsPagination success (String msg, Pagination pagination) {
+		TipsPagination tipsPagination = new TipsPagination();
+		tipsPagination.setMsg(msg);
+		tipsPagination.setValidate(true);
+		tipsPagination.setPagination(pagination);
+		tipsPagination.setCode(HttpServletResponse.SC_OK);
+		return tipsPagination;
+	}
+
+	public static TipsPagination success (String msg, Integer code, Pagination pagination) {
+		TipsPagination tipsPagination = new TipsPagination();
+		tipsPagination.setMsg(msg);
+		tipsPagination.setCode(code);
+		tipsPagination.setValidate(true);
+		tipsPagination.setPagination(pagination);
+		return tipsPagination;
+	}
+
 	public TipsPagination(String msg, Integer code, boolean validate, Pagination<E> pagination) {
 		super();
 		this.msg = msg;
