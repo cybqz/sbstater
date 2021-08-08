@@ -82,14 +82,6 @@ public class Tips {
 		this.validate = validate;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public void setShow(boolean show) {
-		this.show = show;
-	}
-
 	public void setValidate(boolean validate) {
 		this.validate = validate;
 		if(this.validate){
@@ -97,13 +89,5 @@ public class Tips {
 		}else {
 			this.code = HttpServletResponse.SC_BAD_REQUEST;
 		}
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public void setData(Object data) {
-		this.data = data;
 	}
 }
