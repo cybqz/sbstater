@@ -4,10 +4,8 @@ import org.springframework.util.CollectionUtils;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.cyb.common.validation.enums.ListRangeTypeEnum;
 /**
  * @Author 陈迎博
  * @Description 手机号校验注解约束类
